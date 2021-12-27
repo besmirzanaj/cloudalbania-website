@@ -1,4 +1,4 @@
-baseURL = "http://blog.cloudalbania.com/"
+baseURL = "https://blog.cloudalbania.com/"
 languageCode = "en-us"
 title = "CloudAlbania Blog"
 theme = "soho"
