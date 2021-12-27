@@ -7,6 +7,8 @@ description = "Personal blog where I cover my experiences and best practices wit
 summarylength = 10
 enableEmoji = true
 
+googleAnalytics = 'UA-36283915-1'
+
 [params]
 author = "Besmir Zanaj"
 description = "CloudAlbania Blog"
@@ -37,11 +39,6 @@ licenseURL = "https://creativecommons.org/licenses/by-sa/4.0"
   url = "https://twitter.com/besmirzanaj"
 
 [menu]
-  [[menu.main]]
-    identifier = "home"
-    name = "Home"
-    url = "/"
-    weight = 1
   
   [[menu.main]]
     name = "Posts"
@@ -49,11 +46,11 @@ licenseURL = "https://creativecommons.org/licenses/by-sa/4.0"
     identifier = "posts"
     url = "/posts/"
 
-  [[menu.main]]
-    name = "About"
-    identifier = "about"
-    weight = 300
-    url = "/about/"
+#   [[menu.main]]
+#     name = "About"
+#     identifier = "about"
+#     weight = 300
+#     url = "/about/"
 
 [taxonomies]
   category = "categories"
