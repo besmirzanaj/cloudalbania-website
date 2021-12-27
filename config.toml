@@ -1,8 +1,8 @@
 baseURL = "http://blog.cloudalbania.com/"
 languageCode = "en-us"
 title = "CloudAlbania Blog"
-theme = "m10c"
-enableInlineShortcodes = true
+theme = "soho"
+description = "Personal blog where I cover my experiences and best practices with System Administration and DevOps"
 
 summarylength = 10
 enableEmoji = true
@@ -19,13 +19,6 @@ copyright = "Besmir Zanaj"
 license = "CC BY-SA 4.0"
 licenseURL = "https://creativecommons.org/licenses/by-sa/4.0"
 
-
-## Set custom theme color.
-# themeColor = "#fc2803"
-
-## Set custom CSS and/or JS to override site defaults.
-# customCss = ["css/blog.css"]
-# customJs = ["js/blog.js"]
 
   ## Set as many as you want.
   [[params.socialIcons]]
@@ -57,10 +50,10 @@ licenseURL = "https://creativecommons.org/licenses/by-sa/4.0"
     url = "/posts/"
 
   [[menu.main]]
-  name = "About"
-  identifier = "about"
-  weight = 300
-  url = "/about/"
+    name = "About"
+    identifier = "about"
+    weight = 300
+    url = "/about/"
 
 [taxonomies]
   category = "categories"
