@@ -1,4 +1,4 @@
 baseURL = "http://blog.cloudalbania.com/"
 languageCode = "en-us"
 title = "CloudAlbania Blog"
-theme = "ananke"
+theme = "soho"
