@@ -1,7 +1,7 @@
 baseURL = "http://blog.cloudalbania.com/"
 languageCode = "en-us"
 title = "CloudAlbania Blog"
-theme = "soho"
+theme = "m10c"
 enableInlineShortcodes = true
 
 summarylength = 10
@@ -44,12 +44,17 @@ licenseURL = "https://creativecommons.org/licenses/by-sa/4.0"
   url = "https://twitter.com/besmirzanaj"
 
 [menu]
-
   [[menu.main]]
-  name = "Posts"
-  weight = 100
-  identifier = "posts"
-  url = "/posts/"
+    identifier = "home"
+    name = "Home"
+    url = "/"
+    weight = 1
+  
+  [[menu.main]]
+    name = "Posts"
+    weight = 100
+    identifier = "posts"
+    url = "/posts/"
 
   [[menu.main]]
   name = "About"
