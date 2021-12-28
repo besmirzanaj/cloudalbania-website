@@ -1,22 +1,19 @@
 baseURL = "https://blog.cloudalbania.com/"
 languageCode = "en-us"
-title = "CloudAlbania Blog"
+title = "Besmir Zanaj"
 theme = "soho"
-description = "Personal blog where I cover my experiences and best practices with System Administration and DevOps"
 
 summarylength = 10
 enableEmoji = true
 
+# Analytics section
 googleAnalytics = 'UA-36283915-1'
 
+# Soho theme params
 [params]
 author = "Besmir Zanaj"
-description = "CloudAlbania Blog"
-
-## Set one of:
-# gravatar = "soho@example.com"
+description = "Personal blog where I cover my experiences and best practices with System Administration and DevOps"
 profilePicture = "images/profile.png"
-
 copyright = "Besmir Zanaj"
 license = "CC BY-SA 4.0"
 licenseURL = "https://creativecommons.org/licenses/by-sa/4.0"

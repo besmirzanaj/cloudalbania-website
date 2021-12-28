@@ -1,3 +1,6 @@
 ./public/*
 ./public/
 public/
+backup/
+./backup/*
+.hugo_build.lock
