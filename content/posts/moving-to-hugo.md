@@ -5,11 +5,16 @@ draft: false
 ---
 Oroginal site was located at [Blogger CloudAlbania](http://cloudalbania.blogspot.com/) but that platform does not provide the editing tools I needed for text processing, e.g. even a simple code formatting took forever.
 
-Here I will post the import and editing process in Hugo.
+Here I will post the migration steps in Hugo.
+
+## Web hosting platform
+Since Hugo pages are static ones, I really needed some simple webhosting that I could place the `/public` folder. From hugo's [hosting & deployment](https://gohugo.io/hosting-and-deployment/hosting-on-render/) recommendations I found that [Render](https://gohugo.io/hosting-and-deployment/hosting-on-render/) was the best choice so far.
+
+To start migrating I created a git repo in [GitHub](https://github.com/besmirzanaj/cloudalbania-website) first so I could track changes and allow automation of static web pages publishing through Render.
 
 ## Migration preparations
 
-After finding an appropriate them in Hugo ([Soho](https://themes.gohugo.io/themes/soho/) by the way) I needed to migrate from [blogger](https://gohugo.io/tools/migrations/#blogger) to hugo MD files.
+After finding an appropriate theme in Hugo ([Soho](https://themes.gohugo.io/themes/soho/) by the way) I needed to migrate from [blogger](https://gohugo.io/tools/migrations/#blogger) to hugo MD files.
 
 The tool used was [blog2md](https://github.com/palaniraja/blog2md) and the process was faily easy on my Ubuntu 18.04 on WSL1. The project is based on node.
 
