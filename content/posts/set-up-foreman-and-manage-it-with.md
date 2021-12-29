@@ -1,14 +1,16 @@
 ---
 title: 'Set up Foreman and manage it with Ansible'
-date: 2020-08-27T18:26:00.007-04:00
+date: "2020-08-27"
 draft: false
-url: /2020/08/set-up-foreman-and-manage-it-with.html
+url: 
 tags: 
 - centos
 - foreman
 - tools
 - git
 - ansible
+
+
 ---
 
 Managing Foreman recently and got bored to configure it each time I set it up from scratch.
@@ -17,67 +19,59 @@ This blog post will cover initial foreman install on a CentOS 7 server and then 
 
 The repository used in this article is locate [here](https://gitlab.com/besmirzanaj/foreman-management).
 
-### Servers recommendations
+### Server recommendations
 
 Minimum Foreman server hardware recommendations to support CentOS 7 & 8.
 
-*   CentOS 7
-*   4 CPUs
-*   8Gb RAM
-*   100 Gb HDD
+* CentOS 7
+* 4 CPUs
+* 8Gb RAM
+* 100 Gb HDD
 
 Minimum ansible server recommendations:  
 
-*   CentOS 7
-*   1 CPU
-*   256 Mb RAM
-*   8 Gb HDD
+* CentOS 7
+* 1 CPU
+* 256 Mb RAM
+* 8 Gb HDD
 
-Setting up the Foreman server
------------------------------
+## Setting up the Foreman server
 
 ### Configure the OS
 
-Create a CentOS 7 server with the above hardware setting and make sure to have a working DNS for that server or edit its own /etc/hosts with that hostname. For simplicity I am using foreman.cloudalbania.com -> 192.168.0.180.
+Create a CentOS 7 server with the above hardware setting and make sure to have a working DNS for that server or edit its own /etc/hosts with a proper hostname. For simplicity I am using foreman.cloudalbania.com -> 192.168.0.180.
 
-  
-
+```bash
 $ cat /etc/hosts
-
-...
-
-192.168.0.180    foreman.cloudalbania.com    foreman
-
-  
+192.168.0.180   foreman.cloudalbania.com    foreman
+```
 
 Reboot the server and make sure the new hostname is set.
 
+```bash
+$ hostname -f
+foreman.cloudalbania.com
+```
+
 ### Install Katello & Foreman
 
-Next step is to [install the foreman](https://theforeman.org/plugins/katello/3.14/installation/index.html) application with katello content management.
+Next step is to [install the Foreman](https://theforeman.org/plugins/katello/3.14/installation/index.html) application with Katello content management.
 
-This is a pretty straightforward step:
+This is a pretty straightforward step. First install the repositories
 
-  
-
-Install repositories
-
+```bash
 yum -y localinstall https://yum.theforeman.org/releases/1.24/el7/x86\_64/foreman-release.rpm
-
 yum -y localinstall https://fedorapeople.org/groups/katello/releases/yum/3.14/katello/el7/x86\_64/katello-repos-latest.rpm
-
 yum -y localinstall https://yum.puppet.com/puppet6-release-el-7.noarch.rpm
-
 yum -y localinstall https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-
 yum -y install foreman-release-scl
-
+```
   
-
 Then update the OS and restart if any kernel or glibc upgrade
 
+```bash
 yum -y update
-
+```
   
 
 Install katello packages to prepare for the installation step later. This might take some time

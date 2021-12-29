@@ -1,9 +1,9 @@
 ---
 title: "Moving to Hugo"
-date: 2021-06-14T10:29:53-04:00
+date: "2021-12-27"
 draft: false
 ---
-Oroginal site was located at [Blogger CloudAlbania](http://cloudalbania.blogspot.com/) but that platform does not provide the editing tools I needed for text processing, e.g. even a simple code formatting took forever.
+Original site was located at [Blogger CloudAlbania](http://cloudalbania.blogspot.com/) but that platform does not provide the editing tools I needed for text processing, e.g. even a simple code formatting took forever.
 
 Here I will post the migration steps in Hugo.
 

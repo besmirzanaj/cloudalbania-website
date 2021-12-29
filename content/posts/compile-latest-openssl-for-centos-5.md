@@ -1,8 +1,14 @@
 ---
 title: 'Compile latest OpenSSL for CentOS 5'
-date: 2018-05-10T09:13:00.000-04:00
+date: "2018-05-10"
 draft: false
-url: /2018/05/compile-latest-openssl-for-centos-5.html
+#url: /2018/05/compile-latest-openssl-for-centos-5.html
+tags: 
+  - tools
+  - script
+  - openssl
+  - compile
+  - centos
 ---
 
   
