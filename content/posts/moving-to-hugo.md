@@ -8,7 +8,7 @@ Oroginal site was located at [Blogger CloudAlbania](http://cloudalbania.blogspot
 Here I will post the migration steps in Hugo.
 
 ## Web hosting platform
-Since Hugo pages are static ones, I really needed some simple webhosting that I could place the `/public` folder. From hugo's [hosting & deployment](https://gohugo.io/hosting-and-deployment/hosting-on-render/) recommendations I found that [Render](https://gohugo.io/hosting-and-deployment/hosting-on-render/) was the best choice so far.
+Since Hugo pages are static ones, I really needed some simple webhosting that I could place the `/public` folder. From hugo's [hosting & deployment](https://gohugo.io/categories/hosting-and-deployment) recommendations I found that [Render](https://gohugo.io/hosting-and-deployment/hosting-on-render/) was the best choice so far.
 
 To start migrating I created a git repo in [GitHub](https://github.com/besmirzanaj/cloudalbania-website) first so I could track changes and allow automation of static web pages publishing through Render.
 
