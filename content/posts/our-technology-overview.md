@@ -60,4 +60,3 @@ The image service stores private and public images in a variety of formats:
 * VMDK (VMWare)
 
 ![OpenStack Software Diagram](/static/openstack-software-diagram.png 'OpenStack Software Diagram')
-\
