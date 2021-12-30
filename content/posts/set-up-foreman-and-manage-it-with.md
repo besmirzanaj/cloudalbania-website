@@ -2,7 +2,7 @@
 title: 'Set up Foreman and manage it with Ansible'
 date: "2020-08-27"
 draft: false
-url: 
+#url: 
 tags: 
 - centos
 - foreman

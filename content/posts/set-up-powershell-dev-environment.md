@@ -2,7 +2,7 @@
 title: 'Set up a Powershell dev environment'
 date: 2017-10-06T09:39:00.000-04:00
 draft: false
-url: /2017/10/set-up-powershell-dev-environment.html
+#url: /2017/10/set-up-powershell-dev-environment.html
 tags: 
 - tools
 - script

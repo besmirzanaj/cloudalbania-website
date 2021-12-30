@@ -4,3 +4,4 @@ public/
 backup/
 ./backup/*
 .hugo_build.lock
+.vscode/

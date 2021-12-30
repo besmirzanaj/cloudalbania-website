@@ -1,11 +1,9 @@
 ---
-title: 'Ubuntu Cloud documentation – 14.04 LTS'
+title: 'Deploying production grade OpenStack with MAAS, Juju and Landscape'
 date: 2014-11-04T03:41:00.003-05:00
 draft: false
-url: /2014/11/ubuntu-cloud-documentation-14.html
+#url: /2014/11/ubuntu-cloud-documentation-14.html
 ---
-
-  
 
 Deploying production grade OpenStack with MAAS, Juju and Landscape
 
@@ -17,4 +15,4 @@ This installation documentation is divided into four main topics:
 3.  Using Juju to deploy OpenStack
 4.  Deploying Landscape to manage your OpenStack cloud
 
-[Download factsheet](http://insights.ubuntu.com/wp-content/uploads/UCD-latest.pdf?utm_source=Ubuntu%20Cloud%20documentation%20%E2%80%93%2014.04%20LTS&utm_medium=download+link&utm_content=)
+[Download factsheet](https://askubuntu.com/questions/78314/how-do-i-deploy-an-openstack-cloud-with-juju)
