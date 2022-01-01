@@ -17,7 +17,7 @@ Here is an example from CentOS 5 where the latest OpenSSL package is 0.9.8e and 
   
 Let's start with the download and uncompressing the OpenSSL package. The latest package supporting CentOS at the time of this writing from the OpenSSL [webpage](https://www.openssl.org/source/) is 1.0.2o.  
 
-```
+```bash
 $ cd /usr/src/  
 $ curl -O -L https://www.openssl.org/source/openssl-1.0.2o.tar.gz  
 $ tar zxvf openssl-1.0.2o.tar.gz  
@@ -26,13 +26,13 @@ $ cd openssl-1.0.2o
 
 Some libraries that we need in our system in order for a successful compilation of the package are below. allow also the dependencies to be installed in this process such as kernel-headers, cpp, cvs etc.  
 
-```
+```bash
 $ yum install expat-devel gettext-devel zlib-devel gcc autoconf gcc libtool perl-core zlib-devel  
 ```
   
 Now it's time to configure and compile OpenSSL. It is worth to run the tests to see if there are any unexpected errors.  
 
-```
+```bash
 $ ./config --prefix=/usr/local/openssl --openssldir=/usr/local/openssl shared zlib  
 $ make  
 $ make test
@@ -42,7 +42,7 @@ _prefix_ and _openssldir_ sets the output paths for OpenSSL. _shared_ will force
   
 In order to install the libraries and the new binary you need to execute:  
 
-```
+```bash
 $ make install  
 
 ...  
@@ -65,7 +65,6 @@ $ /usr/local/openssl/bin/openssl s_client -connect github.com:443 -tls1_2 | grep
 
 Success!  
 
-
 ### Add the new version in the PATH
 
 After the installation you will probably want to check the version of OpenSSL but it will print out old version. Why? Because it's also installed on your server. I rarely override packages installed via yum. The reason is that when there is a new version of OpenSSL and you will install it via yum, it will simply override the compiled version, and you will have to recompile it again.  
@@ -74,13 +73,13 @@ Instead of overriding files I personally like to create new profile entry and fo
   
 In order to do that, create following file:  
 
-```
+```bash
 $ vi /etc/profile.d/openssl.sh  
 ```
 
 and paste following content:  
 
-```
+```bash
 $ cat /etc/profile.d/openssl.sh  
 pathmunge /usr/local/openssl/bin
 ```
@@ -93,20 +92,20 @@ In order to fix the problem with loading shared libraries we need to create an e
   
 Create following file:  
 
-```
+```bash
 $ vi /etc/ld.so.conf.d/openssl-1.0.2o.conf  
 ```
 
 And paste the following contents:  
 
-```
+```bash
 $ cat /etc/ld.so.conf.d/openssl-1.0.2o.conf  
 /usr/local/openssl/lib  
 ```
 
 We simply told the dynamic linker to include new libraries. After creating the file you need to reload linker by using following command:  
 
-```
+```bash
 $ ldconfig -v  
 
 Check the version of your OpenSSL now. It should print out  
@@ -117,7 +116,7 @@ OpenSSL 1.0.2o 27 Mar 2018
 
 In order to have full HTTPS functionality in most cases we need to use curl to access HTTP data. The defaultcurl version in CentOS 5 of course is compiled to use an outdated version of OpenSSL so we need to recompile a new version supporting the latest OpenSSL version we just compiled  
 
-```
+```bash
 $ cd /usr/src/  
 $ curl -O -L https://curl.haxx.se/download/curl-7.59.0.tar.gz  
 $ tar zxvf curl-7.59.0.tar.gz  

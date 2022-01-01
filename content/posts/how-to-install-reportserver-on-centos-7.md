@@ -9,17 +9,16 @@ ReportServer is a free and open source business intelligence (OSBI) platform wit
 
 In this tutorial, we will install ReportServer on CentOS 7 server.
 
-**Prerequisite**
+### Prerequisite
 
-*   Minimal CentOS 7 server
-*   Root privileges
+* Minimal CentOS 7 server
+* Root privileges
 
-Install ReportServer
---------------------
+## Install ReportServer
 
 Before installing any package it is recommended that you update the packages and repository using the following command.
 
-yum -y update
+    yum -y update
 
 ### Install JAVA
 
