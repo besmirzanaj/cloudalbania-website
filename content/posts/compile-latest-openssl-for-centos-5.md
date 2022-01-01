@@ -2,6 +2,7 @@
 title: 'Compile latest OpenSSL for CentOS 5'
 date: "2018-05-10"
 draft: false
+description: "Latest Openssl for CentOS 5"
 tags: 
   - tools
   - script

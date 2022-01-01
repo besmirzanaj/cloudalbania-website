@@ -1,6 +1,7 @@
 ---
 title: 'Automating my Homelab - Part 1'
-date: "2018-05-10"
+date: "2022-01-01"
+description: "Automate homelabs"
 draft: true
 tags: 
   - proxmox
