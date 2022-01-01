@@ -90,7 +90,7 @@ Main screen after login
 
 The next steps are following this FreeIPA [article](https://www.freeipa.org/page/HowTo/vsphere5_integration) to customize the directory schema for vSphere authentication.
 
-```bash
+```console
 $ echo << EOF > vsphere_usermod.ldif  
 dn: cn=users,cn=Schema Compatibility,cn=plugins,cn=config  
 changetype: modify  
@@ -103,7 +103,7 @@ schema-compat-entry-attribute: sn=%{sn}
 EOF
 ```
 
-```bash
+```console
 $ echo << EOF > vsphere_groupmod.ldif  
 dn: cn=groups,cn=Schema Compatibility,cn=plugins,cn=config  
 changetype: modify  
@@ -118,19 +118,19 @@ EOF
 
 Now apply with the following
 
-```bash
+```console
 $ ldapmodify -x -D "cn=Directory Manager" -f vsphere_usermod.ldif -W  
 ```
 
 and this
 
-```bash
+```console
 $ ldapmodify -x -D "cn=Directory Manager" -f vsphere_groupmod.ldif -W 
 ```
 
 Run following commands as admin to allow the new _sn_ attribute for _compat_ users and _uniqueMember_ for _compat_ groups:
 
-```bash
+```console
 $ ipa permission-mod "System: Read User Compat Tree" --includedattrs sn
 $ ipa permission-mod "System: Read Group Compat Tree" --includedattrs uniquemember
 
@@ -138,7 +138,7 @@ $ ipa permission-mod "System: Read Group Compat Tree" --includedattrs uniquememb
 
 In case you have and error running the above commands then issue from the console the following command to authenticate first:
 
-```bash
+```console
 $ kinit admin 
 ```
 

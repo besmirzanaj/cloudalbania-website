@@ -2,7 +2,6 @@
 title: 'Current projects - 2013'
 date: "2013-03-06"
 draft: false
-#url: 
 tags:
   - projects
 ---

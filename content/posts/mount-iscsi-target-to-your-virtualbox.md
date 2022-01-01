@@ -2,7 +2,6 @@
 title: 'Mount iSCSI target to your Virtualbox VMs'
 date: "2018-03-22"
 draft: false
-#url: /2018/03/mount-iscsi-target-to-your-virtualbox.html
 tags:
   - virtualbox
   - netapp

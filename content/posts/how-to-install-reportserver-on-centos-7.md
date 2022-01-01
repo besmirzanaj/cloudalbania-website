@@ -1,8 +1,7 @@
 ---
 title: 'How to Install ReportServer on CentOS 7'
-date: 2017-07-11T08:59:00.002-04:00
+date: "2017-07-11"
 draft: true
-#url: /2017/07/how-to-install-reportserver-on-centos-7.html
 tags:
   - reportserver
   - centos

@@ -2,13 +2,12 @@
 title: 'Set up Foreman and manage it with Ansible'
 date: "2020-08-27"
 draft: false
-#url: 
 tags: 
-- centos
-- foreman
-- tools
-- git
-- ansible
+  - centos
+  - foreman
+  - tools
+  - git
+  - ansible
 ---
 
 Managing Foreman recently and got bored to configure it each time I set it up from scratch.

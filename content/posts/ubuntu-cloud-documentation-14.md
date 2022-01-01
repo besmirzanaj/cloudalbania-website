@@ -1,8 +1,12 @@
 ---
 title: 'Deploying production grade OpenStack with MAAS, Juju and Landscape'
-date: 2014-11-04T03:41:00.003-05:00
+date: "2014-11-04"
 draft: false
-#url: /2014/11/ubuntu-cloud-documentation-14.html
+tags:
+  - ubuntu
+  - cloud
+  - maas
+  - openstack
 ---
 
 Deploying production grade OpenStack with MAAS, Juju and Landscape

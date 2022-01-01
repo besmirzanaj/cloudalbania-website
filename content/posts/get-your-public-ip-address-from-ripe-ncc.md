@@ -1,17 +1,22 @@
 ---
 title: 'Get your public IP address from Ripe NCC in Powershell'
-date: 2017-06-18T17:54:00.005-04:00
+date: "2017-06-18"
 draft: false
-#url: /2017/06/get-your-public-ip-address-from-ripe-ncc.html
+tags:
+  - public ip
+  - ripe ncc
+  - powershell
 ---
 
 If you are using PowerShell and in the console or the scripts you need to have your public IP address, then Ripe NCC can really help you get this.  
 
-[![](https://www.ripe.net/++resource++ripe.plonetheme.images/RIPE_NCC_logo.png)](https://www.ripe.net/++resource++ripe.plonetheme.images/RIPE_NCC_logo.png)
+[![RIPE NCC LOGO](https://www.ripe.net/++resource++ripe.plonetheme.images/RIPE_NCC_logo.png)](https://www.ripe.net/++resource++ripe.plonetheme.images/RIPE_NCC_logo.png)
 
 You can query RIPE stat servers and receive your IP address as JSON and save it in a variable to use it later. To get the JSON data just excecute this:  
 
-    C:\Windows\system32> $a = (Invoke-WebRequest -Uri "https://stat.ripe.net/data/whats-my-ip/data.json" | ConvertFrom-Json)
+```cmd
+C:\Windows\system32> $a = (Invoke-WebRequest -Uri "https://stat.ripe.net/data/whats-my-ip/data.json" | ConvertFrom-Json)
+```
 
 and you should have this output:  
   
@@ -35,9 +40,13 @@ data              : @{ip=123.123.123.123}
 
 If you just need the IP address then filter out only the IP address object like this:  
 
-    $ip_address = (Invoke-WebRequest -Uri "https://stat.ripe.net/data/whats-my-ip/data.json" | ConvertFrom-Json).data.ip
+```cmd
+$ip_address = (Invoke-WebRequest -Uri "https://stat.ripe.net/data/whats-my-ip/data.json" | ConvertFrom-Json).data.ip
+```
 
 output:
 
-    PS C:\Windows\system32> $ip_address  
-    123.123.123.123
+```cmd
+PS C:\Windows\system32> $ip_address  
+123.123.123.123
+```
