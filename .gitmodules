@@ -2,6 +2,7 @@
 	path = themes/soho
 	url = https://github.com/alexandrevicenzi/soho.git
 
-[submodule "themes/hyde"]
-	path = themes/hyde
-	url = https://github.com/spf13/hyde
+
+[submodule "themes/m10c"]
+	path = themes/m10c
+	url = https://github.com/vaga/hugo-theme-m10c.git

@@ -1,7 +1,7 @@
 baseURL = "https://blog.cloudalbania.com/"
 languageCode = "en-us"
 title = "Besmir Zanaj"
-theme = "soho"
+theme = "m10c"
 #theme = "hyde"
 
 summarylength = 10
@@ -21,20 +21,20 @@ licenseURL = "https://creativecommons.org/licenses/by-sa/4.0"
 
 
   ## Set as many as you want.
-  [[params.socialIcons]]
-  icon = "fa-linkedin"
-  title = "Linkedin"
-  url = "https://www.linkedin.com/in/besmirzanaj/"
+  # [[params.socialIcons]]
+  # icon = "fa-linkedin"
+  # title = "Linkedin"
+  # url = "https://www.linkedin.com/in/besmirzanaj/"
 
-  [[params.socialIcons]]
-  icon = "fa-github"
-  title = "GitHub"
-  url = "https://github.com/besmirzanaj"
+  # [[params.socialIcons]]
+  # icon = "fa-github"
+  # title = "GitHub"
+  # url = "https://github.com/besmirzanaj"
 
-  [[params.socialIcons]]
-  icon = "fa-twitter"
-  title = "Twitter"
-  url = "https://twitter.com/besmirzanaj"
+  # [[params.socialIcons]]
+  # icon = "fa-twitter"
+  # title = "Twitter"
+  # url = "https://twitter.com/besmirzanaj"
 
 [menu]
   
@@ -50,10 +50,10 @@ licenseURL = "https://creativecommons.org/licenses/by-sa/4.0"
 #     weight = 300
 #     url = "/about/"
 
-[taxonomies]
-  category = "categories"
-  series = "series"
-  tag = "tags"
+# [taxonomies]
+#   category = "categories"
+#   series = "series"
+#   tag = "tags"
 
 [markup]
 
