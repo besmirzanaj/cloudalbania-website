@@ -1,7 +1,7 @@
 ---
 title: 'How to Install ReportServer on CentOS 7'
 date: 2017-07-11T08:59:00.002-04:00
-draft: false
+draft: true
 #url: /2017/07/how-to-install-reportserver-on-centos-7.html
 ---
 
@@ -18,55 +18,67 @@ In this tutorial, we will install ReportServer on CentOS 7 server.
 
 Before installing any package it is recommended that you update the packages and repository using the following command.
 
-    yum -y update
+```console
+# yum -y update
+```
 
 ### Install JAVA
 
 Once your system is updated, we will install the latest version of Oracle Java into the server. Run the following command to download the RPM package.
 
-wget --no-cookies --no-check-certificate --header "Cookie:oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.rpm"
+```console
+# wget --no-cookies --no-check-certificate --header "Cookie:oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.rpm"
+```
 
 If you do not have wget installed, you can run the ``yum -y install wget`` to install wget. Now install the downloaded RPM using the following command.
 
-    yum -y localinstall jdk-8u131-linux-x64.rpm
+```console
+# yum -y localinstall jdk-8u131-linux-x64.rpm
+```
 
 You can now check the Java version using the following command.
 
-    java -version
+```console
+$ java -version
+```
 
 You will get the following output.
 
-```
+```console
 [root@liptan-pc ~]# java -version  
 java version "1.8.0_131"  
 Java(TM) SE Runtime Environment (build 1.8.0_131-b11)  
 Java HotSpot(TM) 64-Bit Server VM (build 25.131-b11, mixed mode)  
-
 ```
 
 You will also need to check if JAVA_HOME environment variable is set. Run the following command for same.
 
-    echo $JAVA_HOME
+```console
+echo $JAVA_HOME
+```
 
 If you get a null or blank output, you will need to manually set the `JAVA_HOME` variable. Edit the ``.bash_profile`` file using your favourite editor. In this tutorial, we will use nano editor. Run the following command to edit `.bash_profile` using nano.
 
-    nano ~/.bash_profile
+```console
+nano ~/.bash_profile
+```
 
 Now add the following lines at the at the end of the file.
 
-```
+```console
 export JAVA_HOME=/usr/java/jdk1.8.0_131/  
 export JRE_HOME=/usr/java/jdk1.8.0_131/jre  
-
 ```
 
 Now source the file using the following command.
 
+```console
 source ~/.bash_profile
+```
 
 Now you can run the echo $JAVA_HOME command again to check if the environment variable is set or not.
 
-```
+```console
 [root@liptan-pc ~]# echo $JAVA_HOME   
 /usr/java/jdk1.8.0_131/  
 
@@ -76,12 +88,16 @@ Now you can run the echo $JAVA_HOME command again to check if the environment va
 
 Once JAVA is installed, you will need to install Tomcat server. Tomcat is an application server for JAVA applications. Run the following command to create tomcat user and group.
 
-    groupadd tomcat
+```console
+groupadd tomcat
+```
 
 The above command will create a group named tomcat.
 
-    useradd -M -s /bin/nologin -g tomcat -d /opt/tomcat tomcat
-  
+```console
+useradd -M -s /bin/nologin -g tomcat -d /opt/tomcat tomcat
+```
+
 The above command will create a user tomcat having no login shell and home directory as /opt/tomcat.
 
 Now download the Tomcat archive from Tomcat download page using the following command.
