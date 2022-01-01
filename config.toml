@@ -2,9 +2,9 @@ baseURL = "https://blog.cloudalbania.com/"
 languageCode = "en-us"
 title = "Besmir Zanaj"
 theme = "m10c"
-#theme = "hyde"
+pagination = 100
 
-summarylength = 10
+#summarylength = 10
 enableEmoji = true
 
 # Analytics section
@@ -14,11 +14,11 @@ googleAnalytics = 'UA-36283915-1'
 [params]
 author = "Besmir Zanaj"
 description = "Personal blog where I cover my experiences and best practices with System Administration and DevOps"
-avatar = "images/profile.png"
+avatar = "/profile.png"
 copyright = "Besmir Zanaj"
 license = "CC BY-SA 4.0"
 licenseURL = "https://creativecommons.org/licenses/by-sa/4.0"
-favicon = "images/favicon.ico"
+favicon = "/favicon.ico"
 
   [params.style]
   # darkestColor = "#d35050"
