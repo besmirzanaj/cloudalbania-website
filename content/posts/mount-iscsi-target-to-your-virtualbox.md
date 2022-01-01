@@ -19,7 +19,7 @@ iqn.2018-03.freebsd.com:freebsd
 After creating the netapp svm, lun, lif, etc you can mount the new iSCSI volume with the following command.  
   
 ```powershell
-PS C:\\Program Files\\Oracle\\VirtualBox>
+PS C:\Program Files\Oracle\VirtualBox>
 .\VBoxManage.exe storageattach freebsd --storagectl "SATA" --port 0 --type hdd --medium iscsi --server 192.168.0.162 --target "iqn.1992-08.com.netapp:sn.944d91542e4811e8b5b800505600c301:vs.4" --tport 3260 --initiator "iqn.2018-03.freebsd.com:freebsd"  
 ```
 
