@@ -59,4 +59,4 @@ The image service stores private and public images in a variety of formats:
 * VHD (Hyper-V)
 * VMDK (VMWare)
 
-![OpenStack Software Diagram](/static/openstack-software-diagram.png 'OpenStack Software Diagram')
+![OpenStack Software Diagram](/openstack-software-diagram.png 'OpenStack Software Diagram')

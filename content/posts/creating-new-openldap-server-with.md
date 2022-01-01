@@ -1,8 +1,8 @@
 ---
 title: 'Creating a new LDAP server with FreeIPA and configure to allow vSphere authentication'
-date: 2021-05-28T17:42:00.005-04:00
+date: "2021-05-28"
 draft: false
-url: /2021/05/creating-new-openldap-server-with.html
+#url: /2021/05/creating-new-openldap-server-with.html
 tags: 
 - vmware
 - freeipa
@@ -72,19 +72,19 @@ $ ansible-playbook -u root -i inventory/my-freeipa-server playbooks/install-serv
 
 After 3-4 minutes the server should be up and running
 
-![ansible free ipa install](/static/ldap1.jpg)
+![ansible free ipa install](/ldap1.jpg)
 
 Check the installation on the server with the _ipactl status_ command:
 
-![ipa status](/static/ldap2.jpg)
+![ipa status](/ldap2.jpg)
 
 Finally login to your server at <https://freeipa.cloudalbania.com> with user `admin@cloudalbania.com` and the password we set in the ansible inventory
 
-![Main login screen](/static/ldap3.png)
+![Main login screen](/ldap3.png)
 
 Main screen after login
 
-![Main screen after login](/static/ldap4.png)
+![Main screen after login](/ldap4.png)
 
 ## Configure FreeIPA for RFC4519 and vSphere
 
@@ -154,32 +154,32 @@ We are doing this in order to not add individual users permissions and rather ma
 
 Users in FreeIPA:
 
-![LDAP users](/static/ldap_users.png)
+![LDAP users](/ldap_users.png)
 
 LDAP Groups:
 
-![LDAP groups](/static/ldap_groups.png)
+![LDAP groups](/ldap_groups.png)
 
 Then add the users to the groups:
 
-![LDAP user groups](/static/user_groups.png)
+![LDAP user groups](/user_groups.png)
 
 ## Configure vSphere Authentication for FreeIPA
 
 In the vSphere GUI go in _Admistration -> Single Sign On -> Configuration -> Identity Providers_ and then _Add_.
 
-![vsphere_identity_provider](/static/vsphere_identity_provider.png)
+![vsphere_identity_provider](/vsphere_identity_provider.png)
 
 In the next screen enter the following details as shown in the screenshot below:
 
-![edit_identity_source](/static/edit_identity_source.png)
+![edit_identity_source](/edit_identity_source.png)
 
 _Note: I am not using a certificate to authenticate on the LDAP server as it is out of the scope of this article._
 
 After you save this configuration and there are no errors then you can assign the groups in the _Permissions settings_ in _Access Control_
 
-![vcenter_add_permissions](/static/vcenter_add_permissions.png)
+![vcenter_add_permissions](/vcenter_add_permissions.png)
 
 In the end we should see the following:
 
-![vcenter_final](/static/vcenter_final.png)
+![vcenter_final](/vcenter_final.png)

@@ -13,7 +13,6 @@ You can query RIPE stat servers and receive your IP address as JSON and save it 
 
     C:\Windows\system32> $a = (Invoke-WebRequest -Uri "https://stat.ripe.net/data/whats-my-ip/data.json" | ConvertFrom-Json)
 
-  
 and you should have this output:  
   
 ```cmd
@@ -42,4 +41,3 @@ output:
 
     PS C:\Windows\system32> $ip_address  
     123.123.123.123
-
