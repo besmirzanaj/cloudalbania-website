@@ -14,7 +14,7 @@ googleAnalytics = 'UA-36283915-1'
 [params]
 author = "Besmir Zanaj"
 description = "Personal blog where I cover my experiences and best practices with System Administration and DevOps"
-avatar = "static/profile.png"
+avatar = "images/profile.png"
 copyright = "Besmir Zanaj"
 license = "CC BY-SA 4.0"
 licenseURL = "https://creativecommons.org/licenses/by-sa/4.0"
