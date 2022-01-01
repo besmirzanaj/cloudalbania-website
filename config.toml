@@ -14,7 +14,7 @@ googleAnalytics = 'UA-36283915-1'
 [params]
 author = "Besmir Zanaj"
 description = "Personal blog where I cover my experiences and best practices with System Administration and DevOps"
-avatar = "images/profile.png"
+avatar = "static/profile.png"
 copyright = "Besmir Zanaj"
 license = "CC BY-SA 4.0"
 licenseURL = "https://creativecommons.org/licenses/by-sa/4.0"
@@ -42,35 +42,18 @@ favicon = "images/favicon.ico"
     title = "Twitter"
     url = "https://twitter.com/besmirzanaj"
 
-
-  ## Set as many as you want.
-  # [[params.socialIcons]]
-  # icon = "fa-linkedin"
-  # title = "Linkedin"
-  # url = "https://www.linkedin.com/in/besmirzanaj/"
-
-  # [[params.socialIcons]]
-  # icon = "fa-github"
-  # title = "GitHub"
-  # url = "https://github.com/besmirzanaj"
-
-  # [[params.socialIcons]]
-  # icon = "fa-twitter"
-  # title = "Twitter"
-  # url = "https://twitter.com/besmirzanaj"
-
 [menu]
   
   [[menu.main]]
     name = "Posts"
-    weight = 100
+    weight = 10
     identifier = "posts"
     url = "/posts/"
 
   [[menu.main]]
     name = "About"
     identifier = "about"
-    weight = 300
+    weight = 20
     url = "/about/"
 
 # [taxonomies]
