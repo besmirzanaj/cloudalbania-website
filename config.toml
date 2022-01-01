@@ -20,17 +20,28 @@ license = "CC BY-SA 4.0"
 licenseURL = "https://creativecommons.org/licenses/by-sa/4.0"
 favicon = "images/favicon.ico"
 
-[params.style]
+  [params.style]
   # darkestColor = "#d35050"
   # darkColor = "#212121"
   # lightColor = "#f5e3e0"
   # lightestColor = "#f5f5f5"
   # primaryColor = "#ffffff"
 
-[[params.social]]
-  icon = "github"
-  name = "Github"
-  url = "https://github.com/besmirzanaj"
+  [[params.social]]
+    icon = "github"
+    name = "Github"
+    url = "https://github.com/besmirzanaj"
+
+  [[params.social]]
+    icon = "linkedin"
+    title = "Linkedin"
+    url = "https://www.linkedin.com/in/besmirzanaj/"
+
+  [[params.social]]
+    icon = "twitter"
+    title = "Twitter"
+    url = "https://twitter.com/besmirzanaj"
+
 
   ## Set as many as you want.
   # [[params.socialIcons]]
@@ -86,22 +97,22 @@ favicon = "images/favicon.ico"
   # style = "vs"
   # tabWidth = 4
 
-  [markup.goldmark]
-    [markup.goldmark.extensions]
-      definitionList = true
-      footnote = true
-      linkify = true
-      strikethrough = true
-      table = true
-      taskList = true
-      typographer = true
-    [markup.goldmark.parser]
-      autoHeadingID = true
-      autoHeadingIDType = 'github'
-      [markup.goldmark.parser.attribute]
-        block = false
-        title = true
-    [markup.goldmark.renderer]
-      hardWraps = false
-      unsafe = false
-      xhtml = false
+  # [markup.goldmark]
+  #   [markup.goldmark.extensions]
+  #     definitionList = true
+  #     footnote = true
+  #     linkify = true
+  #     strikethrough = true
+  #     table = true
+  #     taskList = true
+  #     typographer = true
+  #   [markup.goldmark.parser]
+  #     autoHeadingID = true
+  #     autoHeadingIDType = 'github'
+  #     [markup.goldmark.parser.attribute]
+  #       block = false
+  #       title = true
+  #   [markup.goldmark.renderer]
+  #     hardWraps = false
+  #     unsafe = false
+  #     xhtml = false
