@@ -3,6 +3,9 @@ title: 'How to Install ReportServer on CentOS 7'
 date: 2017-07-11T08:59:00.002-04:00
 draft: true
 #url: /2017/07/how-to-install-reportserver-on-centos-7.html
+tags:
+  - reportserver
+  - centos
 ---
 
 ReportServer is a free and open source business intelligence (OSBI) platform with powerful reporting and analysis tools. It gathers data from multiple business touch points and generates different reports from the data. It provides a responsive and unified interface to display the data to the user. It provides powerful ad hoc reporting capabilities and integrates Jasper and Eclipse BIRT in one unified environment.
