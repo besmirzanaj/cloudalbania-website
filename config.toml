@@ -1,4 +1,4 @@
-baseURL = "https://blog.cloudalbania.com/"
+baseURL = "https://cloudalbania.com/"
 languageCode = "en-us"
 title = "Besmir Zanaj"
 theme = "m10c"
@@ -62,40 +62,3 @@ favicon = "/favicon.ico"
 #   tag = "tags"
 
 [markup]
-
-  # [markup.tableOfContents]
-  #   endLevel = 3
-  #   ordered = false
-  #   startLevel = 2
-  
-  # [markup.highlight]
-  # #   anchorLineNos = true
-  # codeFences = true
-  # guessSyntax = false
-  # hl_Lines = ""
-  # lineNoStart = 1
-  # lineNos = false
-  # lineNumbersInTable = true
-  # noClasses = true # if false, you need to provide you own custom CSS
-  # style = "vs"
-  # tabWidth = 4
-
-  # [markup.goldmark]
-  #   [markup.goldmark.extensions]
-  #     definitionList = true
-  #     footnote = true
-  #     linkify = true
-  #     strikethrough = true
-  #     table = true
-  #     taskList = true
-  #     typographer = true
-  #   [markup.goldmark.parser]
-  #     autoHeadingID = true
-  #     autoHeadingIDType = 'github'
-  #     [markup.goldmark.parser.attribute]
-  #       block = false
-  #       title = true
-  #   [markup.goldmark.renderer]
-  #     hardWraps = false
-  #     unsafe = false
-  #     xhtml = false
