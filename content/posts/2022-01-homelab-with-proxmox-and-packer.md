@@ -1,7 +1,7 @@
 ---
-title: 'Automating my Homelab - Part 1 - Packer'
-date: "2022-01-04"
-description: "Autmatic image building in proxmox with Packer"
+title: 'Automating my Homelab - Part 1 - Building VM templates with Packer'
+date: "2022-01-07"
+description: "Autmatic VM image building in Proxmox with Packer"
 draft: false
 tags: 
   - proxmox
