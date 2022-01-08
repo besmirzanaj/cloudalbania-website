@@ -21,7 +21,7 @@ To start migrating I created a git repo in [GitHub](https://github.com/besmirzan
 
 ## Migration preparations
 
-After finding an appropriate theme in Hugo ([Soho](https://themes.gohugo.io/themes/soho/) by the way) I needed to migrate from [blogger](https://gohugo.io/tools/migrations/#blogger) to hugo MD files.
+After finding an appropriate theme in Hugo ([m10c](https://github.com/vaga/hugo-theme-m10c) by the way) I needed to migrate from [blogger](https://gohugo.io/tools/migrations/#blogger) to hugo MD files. I chose this one as I hate managing html or CSS.
 
 The tool used was [blog2md](https://github.com/palaniraja/blog2md) and the process was faily easy on my Ubuntu 18.04 on WSL1. The project is based on node.
 
