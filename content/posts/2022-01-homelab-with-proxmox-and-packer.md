@@ -237,7 +237,7 @@ sys     0m29.969s
 
 ### Rocky Linux
 
-I will focus on the Rocky Linux template that is using public repositories as that is a more generic approach that the reader can use without any customization. The content of the wrapper script for the Rocky Linux image is below. The same as with the Ubuntu one, this script will validate the packer template first and then if successful will continue with the build, otherwise it will exit without any changes.
+I will focus on the Rocky Linux template that is using public repositories to build as that is a more generic approach that the reader can use without much customization. The content of the wrapper script for the Rocky Linux image is below. The same as with the Ubuntu one, this script will validate the packer template first and then if successful will continue with the build, otherwise it will exit without any changes.
 
 ```bash
 $ cat ./scripts/rocky8_proxmox_mirrors.sh
@@ -352,15 +352,17 @@ This was not a walk in the park kind of project as I faced several issues during
 
 ### Disk configuration
 
-After trial and error and also comparing with major IaaS providers it made sense to use the VMware SCSI controller (`pvscsi`) with `virtio` disk and network adapters. This will appear as a `/dev/vda` device in your VM.
+After trial and error and also comparing with major IaaS providers it made sense to use the VMware SCSI controller (`pvscsi`) with [`virtio`](https://serverfault.com/a/803391) disk and network adapters. `pvscsi` allows to add one or more devices to the `scsi` bus and `virtio` is the defacto standard for cloud images. The HDD device will appear as a `/dev/vda` device in your VM.
 
 To allow Terraform to extend the root disk automatically I placed an [autogrow disk script](https://gitlab.com/cloudalbania/packer-proxmox-lab/-/blob/master/ansible/roles/proxmox-custom/files/auto_resize_vda.sh) in the images during build time so that it can be run during provisioning time to extend the root `lv` to the full free partition space from the initial 5Gb.
 
 ### Cloud-init
 
-Proxmox allows you to build a VM with Cloud-init support. It does this by creating a [local cdrom device drive](https://cloudinit.readthedocs.io/en/latest/topics/datasources/nocloud.html) where you can put customizations in build time. From the official Proxmox [documentation](https://pve.proxmox.com/wiki/Cloud-Init_Support#_preparing_cloud_init_templates) this process is not very clear. What we need to do is to just create this drive and leave it empty. It will be filled with customization data during proivisionng time from Terraform.
+Proxmox allows you to build a VM with Cloud-init support. It does this by creating a [local cdrom device drive](https://cloudinit.readthedocs.io/en/latest/topics/datasources/nocloud.html) where you can place customizations during build time. From the official Proxmox [documentation](https://pve.proxmox.com/wiki/Cloud-Init_Support#_preparing_cloud_init_templates) this process is not very clear how it can be done during image building. What we need to do is to just create this drive and leave it empty. It will be filled with customization data during proivisionng time later from Terraform.
 
-Cloud-init, while running as a service in the new VMs, will pick up the content of this drive and customize the VM. This is also part of the [packer plugin capabilities](https://www.packer.io/docs/builders/proxmox/iso#cloud_init) that allowed me to have all of the build process in a single run. Understanding the boundaries of where Packer's job ends and Terraform's begin was where I spent most of the time as I wanted to make sure the process worked in later phases when we will spawn VMs.
+Cloud-init, while running as a service in the new VMs, will pick up the content of this drive and customize the VM. This is also part of the [packer plugin capabilities](https://www.packer.io/docs/builders/proxmox/iso#cloud_init) that allowed me to have all of the build process in a single run.
+
+Understanding the boundaries of where Packer's job ends and Terraform's begin was where I spent most of the time as I wanted to make sure the process worked in later phases when we will spawn VMs.
 
 ## Results
 
