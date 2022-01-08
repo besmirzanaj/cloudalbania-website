@@ -51,8 +51,8 @@ This does not sound like an elegant soultion to me. I like things to be simple a
 The repository of this project is stored at <https://gitlab.com/cloudalbania/packer-proxmox-lab>. This repository contains 3 main templates: two for Rocky Linux 8 and another one for Ubuntu 18.04.
 
 * `templates/ubuntu_1804_proxmox.json` - This template mounts a local Ubuntu 18.04 Server ISO file and installs packages from the ISO.  It then [updates packages](https://gitlab.com/cloudalbania/packer-proxmox-lab/-/blob/master/kickstarts/preseed_1804.cfg#L64) as one of the last steps of OS install. If you want ot dive a bit more on preseed file building, the [official Ubuntu](https://help.ubuntu.com/lts/installation-guide/s390x/apbs02.html) documentation is a great place to start.
-* `templates/rocky8_proxmox_mirrors.json` - This template will boot a [minimal boot](http://download.rockylinux.org/pub/rocky/8/isos/x86_64/Rocky-8.5-x86_64-boot.iso) Rocky Linux ISO and then will be instructed to use a [kickstart](http://ks.cloudalbania.com/rocky8_mirrors_vda.cfg) that will pull install files (RPMs) from public Rocky Linux mirrors.
-* `templates/rocky8_proxmox_foreman.json` - This template will also boot the minimal boot ISO of Rocky Linux 8 but instead will use my local [Foreman repositories]({{< relref "/2020-08-set-up-foreman-and-manage-it-with.md" >}} "Foreman repository") for package installation. I am using this for my homelab as it is buch faster than waiting to donwload the install RPMs from internet.
+* `templates/rocky8_proxmox_mirrors.json` - This template will boot a [minimal boot](http://download.rockylinux.org/pub/rocky/8/isos/x86_64/) Rocky Linux ISO and then will be instructed to use a [kickstart](http://ks.cloudalbania.com/rocky8_mirrors_vda.cfg) that will pull install files (RPMs) from public Rocky Linux mirrors.
+* `templates/rocky8_proxmox_foreman.json` - This template will also boot the minimal boot ISO of Rocky Linux 8 but instead will use my local [Foreman repositories]({{< relref "/2020-08-set-up-foreman-and-manage-it-with.md" >}} "Foreman repository") for package installation. I am using this for my homelab as it is much faster than waiting to donwload the install RPMs from internet.
 
 ### Secrets management
 
@@ -96,11 +96,11 @@ bash ./scripts/rocky8_proxmox_mirrors.sh
 bash ./scripts/rocky8_proxmox_foremanm.sh
 ```
 
-These wrappers scripts will make sure to delete the existing template if present (we want to clean up old templates before building a new one) and then run `packer build`. 
+These wrappers scripts will make sure to delete the existing template if present (we want to clean up old templates before building a new one) and then run `packer build`.
 
 The reason we are deleting the existing template VM manually is that the current Packer plugin for Proxmox is still not able to use the `--force` option to do this for us.
 
-The Packer build process will boot a minimal 5 Gb VM and mount the ISO file on them. After the OS has booted it will enter the [boot commands] (https://www.packer.io/docs/builders/proxmox/iso#boot-command) and will specify which kickstart file to use for the rest of the automated installation depending on the OS being installed.
+The Packer build process will boot a minimal 5 Gb VM and mount the ISO file on them. After the OS has booted it will enter the [boot commands](https://www.packer.io/docs/builders/proxmox/iso#boot-command) and will specify which kickstart file to use for the rest of the automated installation depending on the OS being installed.
 
 The reason I am using a small 5 Gb VM for templates is to have faster VM provisioning times later with Terraform. Each new VM will be cloned from this template disk, so the smaller, the faster VM creation time will be.
 
@@ -354,11 +354,11 @@ This was not a walk in the park kind of project as I faced several issues during
 
 After trial and error and also comparing with major IaaS providers it made sense to use the VMware SCSI controller (`pvscsi`) with `virtio` disk and network adapters. This will appear as a `/dev/vda` device in your VM.
 
-To allow Terraform to extend the root disk automatically I placed an [autogrow disk script](https://gitlab.com/cloudalbania/packer-proxmox-lab/-/blob/master/ansible/roles/proxmox-custom/files/auto_resize_vda.sh) in the images during [build time](https://gitlab.com/cloudalbania/packer-proxmox-lab/-/blob/master/ansible/roles/proxmox-custom/files/auto_resize_vda.sh) so that it can be run during provisioning time to extend the root `lv` to the full free partition space from the initial 5Gb.
+To allow Terraform to extend the root disk automatically I placed an [autogrow disk script](https://gitlab.com/cloudalbania/packer-proxmox-lab/-/blob/master/ansible/roles/proxmox-custom/files/auto_resize_vda.sh) in the images during build time so that it can be run during provisioning time to extend the root `lv` to the full free partition space from the initial 5Gb.
 
 ### Cloud-init
 
-Proxmox allows you to build a VM with Cloud-init support. It does this by creating a [local cdrom device drive](https://cloudinit.readthedocs.io/en/latest/topics/datasources/nocloud.html) where you can put customizations in build time. From the official Proxmox [documentation](https://pve.proxmox.com/wiki/Cloud-Init_Support#_preparing_cloud_init_templates) this process is not very clear. What we need to do is to just create this drive and leave it empty. It wull be filled with customization data during proivisionng time from Terraform.
+Proxmox allows you to build a VM with Cloud-init support. It does this by creating a [local cdrom device drive](https://cloudinit.readthedocs.io/en/latest/topics/datasources/nocloud.html) where you can put customizations in build time. From the official Proxmox [documentation](https://pve.proxmox.com/wiki/Cloud-Init_Support#_preparing_cloud_init_templates) this process is not very clear. What we need to do is to just create this drive and leave it empty. It will be filled with customization data during proivisionng time from Terraform.
 
 Cloud-init, while running as a service in the new VMs, will pick up the content of this drive and customize the VM. This is also part of the [packer plugin capabilities](https://www.packer.io/docs/builders/proxmox/iso#cloud_init) that allowed me to have all of the build process in a single run. Understanding the boundaries of where Packer's job ends and Terraform's begin was where I spent most of the time as I wanted to make sure the process worked in later phases when we will spawn VMs.
 
