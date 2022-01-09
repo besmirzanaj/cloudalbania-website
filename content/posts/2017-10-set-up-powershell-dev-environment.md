@@ -18,7 +18,6 @@ Environment: Windows
 Install and download [TortoiseGit](https://tortoisegit.org/download/) and of course [GIT](https://git-scm.com/download/win). While installing GIT just select the defaults for you.  
 
 ![powershell_local_repo](/powershell_local_repo.png)
-  
 
 ### Saving code
 

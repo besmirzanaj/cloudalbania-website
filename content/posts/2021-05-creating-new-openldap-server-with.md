@@ -29,7 +29,7 @@ We are going to use the official [ansible repository](https://github.com/freeipa
 
 Prepare the git repo and the inventory file
 
-```
+```console
 $ git clone https://github.com/freeipa/ansible-freeipa.git
 $ cd ansible-freeipa
 $ echo << EOF > inventory/my-freeipa-server
@@ -46,13 +46,13 @@ EOF
 
 Install the ansible collections for freeIPA:
 
-```
-ansible-galaxy collection install freeipa.ansible_freeipa -p ./
+```console
+$ ansible-galaxy collection install freeipa.ansible_freeipa -p ./
 ```
 
 Customize the _ansible.cfg_ file:
 
-```
+```console
 $ cat ansible.cfg
 [defaults]
 host_key_checking = False
@@ -66,7 +66,7 @@ nocows=1
 
 On the same directory of the ansible repo run the following to install the FreeIPA server:
 
-```
+```console
 $ ansible-playbook -u root -i inventory/my-freeipa-server playbooks/install-server.yml
 ```
 

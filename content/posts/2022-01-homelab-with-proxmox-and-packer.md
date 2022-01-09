@@ -32,7 +32,7 @@ My homelab consists of two nodes each with [Proxmox VE](https://www.proxmox.com/
 
 ![Synology_datastore](/synology-nfs.png)
 -->
-One of the best things about Proxmox is the fact that it offers an [API](https://pve.proxmox.com/wiki/Proxmox_VE_API) that you can automate most of the tasks. 
+One of the best things about Proxmox is the fact that it offers an [API](https://pve.proxmox.com/wiki/Proxmox_VE_API) that you can automate most of the tasks.
 
 Here is where Packer enters the scene.
 
@@ -44,7 +44,7 @@ At the time of preparing this article, I was focused on building Rocky Linux 8 a
 
 One of the best VM imaging tools in the market is [Packer](https://www.packer.io/) and for this project I am going to use the [Packer Proxmox Builder](https://www.packer.io/docs/builders/proxmox/iso) plugin for this purpose.
 Initially tried to build using [this article](https://dev.to/mike1237/create-proxmox-cloud-init-templates-for-use-with-packer-193a) (and others that were using the [proxmox-clone](https://www.packer.io/docs/builders/proxmox/clone)) but I found out it had to be done in a two step process: One to download a ready to use cloud-image and the other to clone this image, install cloud-init and then save as a template.
-This does not sound like an elegant soultion to me. I like things to be simple and opted to spend a bit more time to have a single process (pipeline) for image builds.
+This does not sound like an elegant solution to me. I like things to be simple and opted to spend a bit more time to have a single process (pipeline) for image builds.
 
 ## Packer project repository
 
@@ -52,7 +52,7 @@ The repository of this project is stored at <https://gitlab.com/cloudalbania/pac
 
 * `templates/ubuntu_1804_proxmox.json` - This template mounts a local Ubuntu 18.04 Server ISO file and installs packages from the ISO.  It then [updates packages](https://gitlab.com/cloudalbania/packer-proxmox-lab/-/blob/master/kickstarts/preseed_1804.cfg#L64) as one of the last steps of OS install. If you want ot dive a bit more on preseed file building, the [official Ubuntu](https://help.ubuntu.com/lts/installation-guide/s390x/apbs02.html) documentation is a great place to start.
 * `templates/rocky8_proxmox_mirrors.json` - This template will boot a [minimal boot](http://download.rockylinux.org/pub/rocky/8/isos/x86_64/) Rocky Linux ISO and then will be instructed to use a [kickstart](http://ks.cloudalbania.com/rocky8_mirrors_vda.cfg) that will pull install files (RPMs) from public Rocky Linux mirrors.
-* `templates/rocky8_proxmox_foreman.json` - This template will also boot the minimal boot ISO of Rocky Linux 8 but instead will use my local [Foreman repositories]({{< relref "/2020-08-set-up-foreman-and-manage-it-with.md" >}} "Foreman repository") for package installation. I am using this for my homelab as it is much faster than waiting to donwload the install RPMs from internet.
+* `templates/rocky8_proxmox_foreman.json` - This template will also boot the minimal boot ISO of Rocky Linux 8 but instead will use my local [Foreman repositories]({{< relref "/2020-08-set-up-foreman-and-manage-it-with.md" >}} "Foreman repository") for package installation. I am using this for my homelab as it is much faster than waiting to download the install RPMs from internet.
 
 ### Secrets management
 
@@ -61,7 +61,7 @@ Proxmox and the newly built VMs need credentials to allow Packer to login and ru
 ```bash
 $ cat ./secrets.json
 {
-    "ssh-password": "templates_ssh_passwork",
+    "ssh-password": "templates_ssh_password",
     "proxmox-url": "https://server01.homelab.com:8006/api2/json",
     "proxmox-node": "server01",
     "proxmox-username": "eg_root@pam",
@@ -75,12 +75,12 @@ where:
 * `proxmox-url` is the [api URL](https://www.packer.io/docs/builders/proxmox/iso#proxmox_url) of one of the Proxmox nodes
 * `proxmox-node` is the node where the build will take place
 * `proxmox-username` is the login for your proxmox instance
-* `proxomox-passowrd` is the password for the above login
+* `proxomox-password` is the password for the above login
 
 ## Building images
 
 Before runnig the packer template builds make sure to update the [storage pool](https://www.packer.io/docs/builders/proxmox/iso#disks) to match your own and also to upload the ISO file of your distribution so that the builder can mount it. Uploading the ISO files and preparing the storage backed for Proxmox is out of scope of this article.
-As per the kickstart files themselves I chose ot host them both locally in my repo at `./kickstarts` folder and also publish in a publicly accessble place such as <http://ks.cloudalbania.com>.
+As per the kickstart files themselves I chose ot host them both locally in my repo at `./kickstarts` folder and also publish in a publicly accessible place such as <http://ks.cloudalbania.com>.
 
 Once the repo is ready and Packer is [installed](https://www.packer.io/downloads) you can run the build wrapper scripts in the `./scripts` folder. For Ubuntu 18.04 I use:
 
@@ -93,7 +93,7 @@ and for Rocky Linux 8 I use:
 ```bash
 bash ./scripts/rocky8_proxmox_mirrors.sh
 # or this if using my local repos:
-bash ./scripts/rocky8_proxmox_foremanm.sh
+bash ./scripts/rocky8_proxmox_foreman.sh
 ```
 
 These wrappers scripts will make sure to delete the existing template if present (we want to clean up old templates before building a new one) and then run `packer build`.
@@ -220,11 +220,12 @@ The full Ubuntu 18.04 [packer template](https://gitlab.com/cloudalbania/packer-p
 }
 ```
 
-
-
 After the build is complete we should get an output similar to this:
 
 ```bash
+$ bash ./scripts/ubuntu1804_proxmox.sh
+...
+...
 ==> Wait completed after 11 minutes 22 seconds
 ==> Builds finished. The artifacts of successful builds are:
 ==> Wait completed after 11 minutes 22 seconds
@@ -336,6 +337,9 @@ The full Rocky Linux 8 [packer template](https://gitlab.com/cloudalbania/packer-
   ```
 
 ```bash
+$ bash ./scripts/rocky8_proxmox_mirrors.sh
+...
+...
 ==> Wait completed after 16 minutes 3 seconds
 ==> Builds finished. The artifacts of successful builds are:
 ==> Wait completed after 16 minutes 3 seconds
@@ -358,7 +362,7 @@ To allow Terraform to extend the root disk automatically I placed an [autogrow d
 
 ### Cloud-init
 
-Proxmox allows you to build a VM with Cloud-init support. It does this by creating a [local cdrom device drive](https://cloudinit.readthedocs.io/en/latest/topics/datasources/nocloud.html) where you can place customizations during build time. From the official Proxmox [documentation](https://pve.proxmox.com/wiki/Cloud-Init_Support#_preparing_cloud_init_templates) this process is not very clear how it can be done during image building. What we need to do is to just create this drive and leave it empty. It will be filled with customization data during proivisionng time later from Terraform.
+Proxmox allows you to build a VM with Cloud-init support. It does this by creating a [local cdrom device drive](https://cloudinit.readthedocs.io/en/latest/topics/datasources/nocloud.html) where you can place customizations during build time. From the official Proxmox [documentation](https://pve.proxmox.com/wiki/Cloud-Init_Support#_preparing_cloud_init_templates) this process is not very clear how it can be done during image building. What we need to do is to just create this drive and leave it empty. It will be filled with customization data during provisioning time later from Terraform.
 
 Cloud-init, while running as a service in the new VMs, will pick up the content of this drive and customize the VM. This is also part of the [packer plugin capabilities](https://www.packer.io/docs/builders/proxmox/iso#cloud_init) that allowed me to have all of the build process in a single run.
 
@@ -366,6 +370,6 @@ Understanding the boundaries of where Packer's job ends and Terraform's begin wa
 
 ## Results
 
-These packer templates are now fully working and delivering builds on my Proxmox cluster htat I will use in later steps.
+These Packer templates are now ready to deliver new VMs on my Proxmox cluster that I will use in later steps.
 
 ![Packer built templates](/proxmox_templates_ready.png)

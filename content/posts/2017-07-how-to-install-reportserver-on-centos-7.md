@@ -47,7 +47,7 @@ $ java -version
 You will get the following output.
 
 ```console
-[root@liptan-pc ~]# java -version  
+[root@server ~]# java -version  
 java version "1.8.0_131"  
 Java(TM) SE Runtime Environment (build 1.8.0_131-b11)  
 Java HotSpot(TM) 64-Bit Server VM (build 25.131-b11, mixed mode)  
@@ -81,7 +81,7 @@ source ~/.bash_profile
 Now you can run the echo $JAVA_HOME command again to check if the environment variable is set or not.
 
 ```console
-[root@liptan-pc ~]# echo $JAVA_HOME   
+[root@server ~]# echo $JAVA_HOME   
 /usr/java/jdk1.8.0_131/  
 
 ```
@@ -149,7 +149,7 @@ Now run the following command to create a new user for ReportServer database.
 You will need to enter the password twice. You should get the following output.
 
 ```
-[root@liptan-pc ~]# sudo -u postgres  createuser -P -s -e reportserver  
+[root@server ~]# sudo -u postgres  createuser -P -s -e reportserver  
 Enter password for new role:  
 Enter it again:  
 CREATE ROLE reportserver PASSWORD 'md5171d269772c6fa27e2d02d9e13f0538b' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN;  
@@ -296,7 +296,7 @@ To check if the service is running, run the following command.
 If the service is running, you should get the following output.
 
 ```
-[root@liptan-pc reportserver]# systemctl status tomcat  
+[root@server reportserver]# systemctl status tomcat  
 ? tomcat.service - Apache Tomcat Web Application Container  
    Loaded: loaded (/etc/systemd/system/tomcat.service; enabled; vendor preset: disabled)  
    Active: active (running) since Wed 2017-06-07 15:00:32 UTC; 4min 41s ago  
@@ -304,8 +304,8 @@ If the service is running, you should get the following output.
    CGroup: /system.slice/tomcat.service  
            ??13179 /usr/java/jdk1.8.0_131/jre/bin/java -Djava.util.logging.config.file=/opt/tomcat/conf/logging.propert...  
   
-Jun 07 15:00:32 liptan-pc systemd[1]: Starting Apache Tomcat Web Application Container...  
-Jun 07 15:00:32 liptan-pc systemd[1]: Started Apache Tomcat Web Application Container.  
+Jun 07 15:00:32 server systemd[1]: Starting Apache Tomcat Web Application Container...  
+Jun 07 15:00:32 server systemd[1]: Started Apache Tomcat Web Application Container.  
 
 ```
 

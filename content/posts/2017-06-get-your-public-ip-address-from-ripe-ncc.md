@@ -12,7 +12,7 @@ If you are using PowerShell and in the console or the scripts you need to have y
 
 [![RIPE NCC LOGO](https://www.ripe.net/++resource++ripe.plonetheme.images/RIPE_NCC_logo.png)](https://www.ripe.net/++resource++ripe.plonetheme.images/RIPE_NCC_logo.png)
 
-You can query RIPE stat servers and receive your IP address as JSON and save it in a variable to use it later. To get the JSON data just excecute this:  
+You can query RIPE stat servers and receive your IP address as JSON and save it in a variable to use it later. To get the JSON data just execute this:  
 
 ```cmd
 C:\Windows\system32> $a = (Invoke-WebRequest -Uri "https://stat.ripe.net/data/whats-my-ip/data.json" | ConvertFrom-Json)

@@ -23,7 +23,7 @@ To start migrating I created a git repo in [GitHub](https://github.com/besmirzan
 
 After finding an appropriate theme in Hugo ([m10c](https://github.com/vaga/hugo-theme-m10c) by the way) I needed to migrate from [blogger](https://gohugo.io/tools/migrations/#blogger) to hugo MD files. I chose this one as I hate managing html or CSS.
 
-The tool used was [blog2md](https://github.com/palaniraja/blog2md) and the process was faily easy on my Ubuntu 18.04 on WSL1. The project is based on node.
+The tool used was [blog2md](https://github.com/palaniraja/blog2md) and the process was fairly easy on my Ubuntu 18.04 on WSL1. The project is based on node.
 
 ### Folder preparations
 
@@ -40,7 +40,7 @@ npm install
 Now we need a backup of the original site in a XML format. In your blogger admin portal, go to _Settings –> Other –> Import & back up –> Back up content_.
 Save the XML in the same ``migration`` folder.
 
-For Blogger imports, blog posts and comments (as seperate file `<postname>-comments.md`) will be created in "`out`" directory
+For Blogger imports, blog posts and comments (as separate file `<postname>-comments.md`) will be created in "`out`" directory
 
 ```bash
 node index.js b your-blogger-backup-export.xml out
@@ -54,4 +54,4 @@ Don't forget to either clean up the migration folder or add a new .gitignore ent
 
 ## Next steps
 
-`blog2md` does not import images from blogger. Images need to be copied over as [static files](https://gohugo.io/content-management/static-files/) in order to fully remove blogger's dependecies.
+`blog2md` does not import images from blogger. Images need to be copied over as [static files](https://gohugo.io/content-management/static-files/) in order to fully remove blogger's dependencies.
