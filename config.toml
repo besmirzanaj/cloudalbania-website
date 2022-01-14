@@ -81,7 +81,7 @@ favicon = "/favicon.ico"
       [server.headers.values]
         Strict-Transport-Security = "max-age=31536000; includeSubDomains"
         # For CSP see https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
-        Content-Security-Policy = "default-src 'self' *.zgo.at"
+        Content-Security-Policy = "default-src 'self' *.zgo.at *.goatcounter.com"
         X-Frame-Options = "SAMEORIGIN"
         X-Content-Type-Options = "nosniff"
         Referrer-Policy= "strict-origin-when-cross-origin"
