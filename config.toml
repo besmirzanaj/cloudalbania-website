@@ -72,8 +72,8 @@ favicon = "/favicon.ico"
     lineNos = false
     lineNumbersInTable = true
     noClasses = true
-    style = 'monokai'
-    tabWidth = 4
+    style = 'bw'
+    tabWidth = 2
 
 [server]
   [[server.headers]]
