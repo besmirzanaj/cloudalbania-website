@@ -76,7 +76,7 @@ source ./proxmox_creds.env
 
 We can now start creating resources.
 
-## Resource management
+## Variables management
 
 One of the best crash courses in Terraform I can suggest (which also helped me get certified as a Terraform Associate) is in this [Youtube Video](https://www.youtube.com/watch?v=SLB_c_ayRMo) from <freeCodeCamp.org>.
 
@@ -95,7 +95,7 @@ To achieve this, in our repo, we would need several Terraform files. Namely:
 5. `terraform.tfvars` - this is the where we store actual variable values that terraform will use to grab and fill the info on the loops above or variables as needed. We will also store any other plain variable such as [strings](https://www.terraform.io/language/expressions/types#string)
 
 
-The content of the files `main.tf`, `proxmox_homelab_vms.tf`, `proxmox_homelab_lxc.tf` and `terraform.tfvars` is shown above or in the examples below. The `variables.tf` file contains the variables declaration and description. In terramof you have to declare everything, including the variables. Here is part of my file:
+The content of the files `main.tf`, `proxmox_homelab_vms.tf`, `proxmox_homelab_lxc.tf` and `terraform.tfvars` is shown above or in the examples below. The `variables.tf` file contains the variables declaration and description. In terraform you have to declare everything, including the variables. Here is part of my file:
 
 ```terraform
 variable "ssh_password" {
@@ -109,7 +109,7 @@ variable "ssh_user" {
 }
 
 variable "ssh_pub_key" {
-  description = "users pub lkey"
+  description = "users public key"
   type        = string
 }
 
@@ -125,7 +125,7 @@ variable "k8s_workers" {
 ...
 ```
 
-### VM management
+## VM management
 
 As explained above, our VMs will be configured in the `proxmox_homelab_vms.tf` file and we will be assigning values to variables in `terraform.tfvars`.
 
@@ -203,7 +203,7 @@ Some notes to consider when building VMs with the terraform provider.
 
 #### Proxmox API is slow
 
-Always consider the fact that the Proxmox API might be a bit slow and Terraform might get conflicting information on the status of VMs. This might lead to stuck processes or stuck VMS.To mitigate this I had to run Terraform with 3 jobs max at a time
+Always consider the fact that the Proxmox API might be a bit slow and Terraform might get conflicting information on the status of VMs. This might lead to stuck processes or stuck VMS. To mitigate this I had to run Terraform with 3 jobs max at a time
 
 ```bash
 $ terraform apply --parallelism=3 --auto-approve
@@ -215,9 +215,8 @@ We should use the setting `os_type = "cloud-init"` in our resource in order for 
 
 #### VM customizations
 
-I am using the `remote-exec` provisioner and did not want ot have a big list of commands in this `.tf` file. You can configure the newly built VMs by calling ansible locally (will show you this in the next article) or I really wanted to run some bash scripts within the VMs. One of these important scripts is the disk resize to the new partition from the 5 GB one we crete the template with Packer. The other commands consists in firewalld configuration for these specific VMs (Opening ports for k8s)
-
-in my `terrafrom.tfvars` file I have declared two variables with some bash shell scripts:
+I am using the `remote-exec` provisioner and did not want ot have a big list of commands in this `.tf` file. You can configure the newly built VMs by calling ansible locally (will show you this in the next article) or I really wanted to run some bash scripts within the VMs. One of these important scripts is the disk resize to the new partition from the 5 GB one we crete the template with Packer. The other commands consists in firewalld configuration for these specific VMs (Opening ports for k8s).
+In my `terrafrom.tfvars` file I have declared two variables with some bash shell scripts:
 
 ```terraform
 firewalld_k8s_config = [
@@ -244,7 +243,7 @@ extend_root_disk_script = [
     ]
 ```
 
-Since I want all of these commands to run on my servers on server creation, Terraform offers the [`concat`](https://www.terraform.io/language/functions/concat) function to combine these two lists. This is how I am combining them in the `remote-exec`provisioner:
+Since I want all of these commands to run on my servers on server creation, Terraform offers the [`concat`](https://www.terraform.io/language/functions/concat) function to combine these two lists. This is how I am combining them in the `remote-exec` provisioner in the `inline` parameter:
 
 ```terraform
 provisioner "remote-exec" {
@@ -261,13 +260,13 @@ provisioner "remote-exec" {
 
 #### HDD controllers
 
-I wanted to use a hardware controller compatible with `virtio` for HDDs and also to allow me to add more disks to the same controller in the future, rather than add more controllers per each additional disk. For this reason I added the option
+I wanted to use a hardware controller compatible with `virtio` for HDDs and also to allow me to add more disks to the same controller in the future, rather than add more controllers per each additional disk. For this reason I configured the `scsihw` option like this:
 
 ```terraform
 scsihw = "virtio-scsi-pci"
 ```
 
-### LXC Container resource management
+## LXC Container resource management
 
 Same as above we want the LXC containers to be managed by a dedicated file `proxmox_homelab_lxc.tf` (this is not mandatory, we are doing this only for better readability and code organization).
 Here I am showing how I am building generic Rocky Linux LXC Containers by declaring them as a `lxc_rocky_linux` map variable in `terraform.tfvars`:
