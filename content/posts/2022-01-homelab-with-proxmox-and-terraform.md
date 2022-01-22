@@ -1,6 +1,6 @@
 ---
 title: 'Automating my Homelab - Part 2 - Provisioning with Terraform'
-date: "2022-01-08"
+date: "2022-01-15"
 description: "VM provisioning in Proxmox with Terraform"
 draft: false
 tags: 
