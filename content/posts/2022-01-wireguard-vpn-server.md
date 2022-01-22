@@ -1,6 +1,6 @@
 ---
-title: 'Free Wireguard VPN server'
-date: "2022-01-16"
+title: 'Build your own Wireguard VPN server'
+date: "2022-01-21"
 description: "Create your own VPN server with bash"
 draft: false
 tags: 
