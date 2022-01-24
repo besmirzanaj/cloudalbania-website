@@ -9,7 +9,6 @@ tags:
   - bash
   - linux
 ---
-<meta charset="UTF-8"/>
 
 ## Introduction
 
