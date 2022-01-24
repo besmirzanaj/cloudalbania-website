@@ -1,5 +1,5 @@
 ---
-title: 'Troubleshooting SFP physical network links'
+title: 'Troubleshooting physical fiber SFP network modules'
 date: "2022-01-24"
 description: "troubleshoot fiber and copper SFP adapter health"
 draft: false
