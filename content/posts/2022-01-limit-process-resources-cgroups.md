@@ -2,7 +2,7 @@
 title: 'Limit process resources with cgroups in Linux'
 date: "2022-01-24"
 description: "limit process CPU usage on a linux system with cgroups"
-draft: true
+draft: false
 tags: 
   - cgroups
   - apache
