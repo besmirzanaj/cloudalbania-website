@@ -12,6 +12,20 @@ tags:
   - k8s
 ---
 
+## Table of Content
+- [Table of Content](#table-of-content)
+- [Homelab Infrastructure](#homelab-infrastructure)
+- [Packer image building](#packer-image-building)
+- [Packer project repository](#packer-project-repository)
+  - [Secrets management](#secrets-management)
+- [Building images](#building-images)
+  - [Ubuntu](#ubuntu)
+  - [Rocky Linux](#rocky-linux)
+- [Things that I spent more time](#things-that-i-spent-more-time)
+  - [Disk configuration](#disk-configuration)
+  - [Cloud-init](#cloud-init)
+- [Results](#results)
+
 Last year I started to seriously master my [Kubernetes (k8s)](https://kubernetes.io/) knowledge and I was lucky to get a promo code for 50% off from the  [CKA](https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/) exam.
 At the same time , working with IT infrastructure systems, I really wanted to learn and deploy a [PROD level](https://www.reddit.com/r/kubernetes/comments/ppxr5j/what_is_a_production_ready_cluster_according_to/) environment at work for our teams to use.
 

@@ -10,7 +10,16 @@ tags:
   - compile
   - centos
 ---
-  
+
+## Table of Content
+- [Table of Content](#table-of-content)
+- [Introduction](#introduction)
+  - [Add the new version in the PATH](#add-the-new-version-in-the-path)
+  - [Link libraries](#link-libraries)
+- [Curl](#curl)
+
+## Introduction
+
 Sometimes we are still managing very old hardware or OS versions and that we have nothing in our hands to change it till it phases out.  
   
 Here is an example from CentOS 5 where the latest OpenSSL package is 0.9.8e and of course it [does not support TLS 1.2](https://access.redhat.com/articles/1462353)  

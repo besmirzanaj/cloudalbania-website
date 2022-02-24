@@ -12,6 +12,15 @@ tags:
 - openldap
 ---
 
+## Table of Content
+
+- [Table of Content](#table-of-content)
+- [Preparing the Ansible host and FreeIPA repository](#preparing-the-ansible-host-and-freeipa-repository)
+- [Installing FreeIPA](#installing-freeipa)
+- [Configure FreeIPA for RFC4519 and vSphere](#configure-freeipa-for-rfc4519-and-vsphere)
+- [Initial configuration for FreeIPA](#initial-configuration-for-freeipa)
+- [Configure vSphere Authentication for FreeIPA](#configure-vsphere-authentication-for-freeipa)
+
 Was setting up a new FreeIPA sever for my homelab and found out that the default configuration in FreeIPA does not allow you to use VMware vSphere as a client as not being fully [RFC4519](https://datatracker.ietf.org/doc/html/rfc4519) and missing some other LDAP class settings.
 
 Lets go through the steps of setting up a new FreeIPA server. We are going to use the official ansible repositories and collection for this purpose.

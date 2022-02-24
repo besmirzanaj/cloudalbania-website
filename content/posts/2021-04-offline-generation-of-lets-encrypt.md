@@ -9,6 +9,13 @@ tags:
 - tls
 ---
 
+## Table of Content
+- [Table of Content](#table-of-content)
+- [Introduction](#introduction)
+- [Install certbot](#install-certbot)
+
+## Introduction
+
 Sometimes we need to get a Let's Encrypt SSL certificate for a system that might not be connected in the internet or where the certbot client is not able to be installed. There is an easy way to generate a SSL chain that we can use in our internal applications.
 
 ## Install certbot

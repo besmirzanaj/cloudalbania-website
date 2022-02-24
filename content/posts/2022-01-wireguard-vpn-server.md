@@ -10,6 +10,17 @@ tags:
   - linux
 ---
 
+## Table of Content
+- [Table of Content](#table-of-content)
+- [Introduction](#introduction)
+- [Project Repository](#project-repository)
+- [Step by step instructions](#step-by-step-instructions)
+  - [Wireguard server install](#wireguard-server-install)
+  - [Troubleshooting](#troubleshooting)
+- [Client Setup](#client-setup)
+  - [Mobile phone VPN client setup](#mobile-phone-vpn-client-setup)
+  - [Windows desktop client](#windows-desktop-client)
+
 ## Introduction
 
 Last year had to help a friend build a [Wireguard VPN](https://www.wireguard.com/) server and while I was working on that project I had the idea to automate the setup process.

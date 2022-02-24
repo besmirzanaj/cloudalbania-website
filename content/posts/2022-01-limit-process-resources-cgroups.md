@@ -10,6 +10,27 @@ tags:
   - cpu
 ---
 
+## Table of Content
+- [Table of Content](#table-of-content)
+- [Initial analysis](#initial-analysis)
+- [How Control Groups Are Organized](#how-control-groups-are-organized)
+  - [The Linux Process Model](#the-linux-process-model)
+  - [The Cgroup Model](#the-cgroup-model)
+  - [Available Subsystems in the Linux kernel](#available-subsystems-in-the-linux-kernel)
+  - [CFS Tunable Parameters](#cfs-tunable-parameters)
+    - [Ceiling Enforcement Tunable Parameters](#ceiling-enforcement-tunable-parameters)
+- [Limitig apache process to 80% CPU usage](#limitig-apache-process-to-80-cpu-usage)
+- [Implementation in Puppet configuration management](#implementation-in-puppet-configuration-management)
+- [Benchmarking](#benchmarking)
+  - [Full throttle testing](#full-throttle-testing)
+  - [Test results](#test-results)
+  - [Normal Average testing](#normal-average-testing)
+- [Cgroups Examples](#cgroups-examples)
+  - [Example CPU limits usage](#example-cpu-limits-usage)
+  - [Cgroups considerations](#cgroups-considerations)
+- [Systemd example](#systemd-example)
+- [References](#references)
+
 Sharing here an older article from 2017 I had written to limit the CPU usage of the `httpd` apache web server workload to not reach 100% usage and take the VM completely unreachable and useless. 
 
 This was before I learned that I could do this with containers, which have [`cgroups`](https://en.wikipedia.org/wiki/Cgroups) as part of their construct. The article focuses on the httpd service on a CentOS 6 server but it can be extened for any kind of `init`. A [systemd](https://systemd.io/) example is included in the bottom.

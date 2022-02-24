@@ -9,6 +9,9 @@ tags:
     - git
 ---
 
+UPDATE - FEB 2022: This guide is a bit obsolete by now. Best way is to install WSL.
+
+-------------
 For us sysadmins it is important to create scripts on the fly and make things work. By working in an ad-hoc way, our scripts will get lost, not cured and especially not searchable.  
 
 ### Initial tools setup

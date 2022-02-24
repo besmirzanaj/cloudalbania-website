@@ -11,6 +11,20 @@ tags:
   - k8s
 ---
 
+## Table of Content
+- [Table of Content](#table-of-content)
+- [Setting up the project](#setting-up-the-project)
+  - [Terraform credentials](#terraform-credentials)
+- [Variables management](#variables-management)
+- [VM management](#vm-management)
+  - [Considerations when creating VMs](#considerations-when-creating-vms)
+    - [Proxmox API is slow](#proxmox-api-is-slow)
+    - [Use cloud-init](#use-cloud-init)
+    - [VM customizations](#vm-customizations)
+    - [HDD controllers](#hdd-controllers)
+- [LXC Container resource management](#lxc-container-resource-management)
+- [Conclusion](#conclusion)
+
 This is a continuation the previous article [Automating my Homelab - Part 1 - Building VM templates with Packer]({{< relref "/2022-01-homelab-with-proxmox-and-packer.md" >}} "Packer in Proxmox").
 
 Now that we have the images ready to be "consumed" we need a tool to automate the task of VM creation and customization for us. One such tool is [Terraform](https://www.terraform.io/) which is an open-source infrastructure as code software tool that will allow us to manage VM resources. Terraform codifies cloud APIs into declarative configuration files. In our case it will work with the [Proxmox API](https://pve.proxmox.com/wiki/Proxmox_VE_API). The best [Terraform provider](https://www.terraform.io/language/providers) to work with the Proxmox API as of the writing of this article is developed by [Telmate](https://registry.terraform.io/namespaces/Telmate) and is available in the [Terraform public registry](https://registry.terraform.io/providers/Telmate/proxmox/).

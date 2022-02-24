@@ -10,6 +10,12 @@ tags:
   - nic
 ---
 
+## Table of Content
+- [Table of Content](#table-of-content)
+- [Basic usage of ethtool](#basic-usage-of-ethtool)
+- [Getting SFP and media info](#getting-sfp-and-media-info)
+- [Getting SFP diagnostic info from all interfaces](#getting-sfp-diagnostic-info-from-all-interfaces)
+
 Sometimes I have faced issues in fiber connections between computers and switches and most of the time I was remote and just could not be on site. If your system is Linux based, there is a well known swiss army knife software called [ethtool](https://linux.die.net/man/8/ethtool), which I believe every sysadmin should learn to use it, that can query or control network driver and hardware settings. It can help us troubleshoot network interfaces, [and do a lot more](https://community.mellanox.com/s/article/How-to-Use-Ethtool-to-Flash-firmware).
 
 ## Basic usage of ethtool

@@ -10,6 +10,19 @@ tags:
   - ansible
 ---
 
+## Table of Content
+- [Table of Content](#table-of-content)
+- [Introduction](#introduction)
+  - [Server recommendations](#server-recommendations)
+- [Setting up the Foreman server](#setting-up-the-foreman-server)
+  - [Configure the OS](#configure-the-os)
+  - [Install Katello & Foreman](#install-katello--foreman)
+- [Install and configure the ansible server](#install-and-configure-the-ansible-server)
+  - [Using Foreman ansible collections](#using-foreman-ansible-collections)
+- [Managing Foreman - Your first playbook](#managing-foreman---your-first-playbook)
+
+## Introduction
+
 Managing Foreman recently and got bored to configure it each time I set it up from scratch.
 
 This blog post will cover initial foreman install on a CentOS 7 server and then manage it with ansible through the [foreman ansible collections](https://github.com/theforeman/foreman-ansible-modules).

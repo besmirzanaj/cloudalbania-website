@@ -9,6 +9,15 @@ tags:
   - website
 ---
 
+## Table of Content
+
+- [Table of Content](#table-of-content)
+- [Web hosting platform](#web-hosting-platform)
+- [Migration preparations](#migration-preparations)
+  - [Folder preparations](#folder-preparations)
+- [Cleanup and posting on production site](#cleanup-and-posting-on-production-site)
+- [Next steps](#next-steps)
+
 Original site was located at [Blogger CloudAlbania](http://cloudalbania.blogspot.com/) but that platform does not provide the editing tools I needed for text processing, e.g. even a simple code formatting took forever.
 
 Here I will post the migration steps in Hugo.
