@@ -8,7 +8,7 @@ pagination = 100
 enableEmoji = true
 
 # Analytics section
-googleAnalytics = '311798158'
+googleAnalytics = '297718740'
 
 pygmentsCodeFences = true
 pygmentsUseClasses = true
@@ -22,6 +22,7 @@ copyright = "Besmir Zanaj"
 license = "CC BY-SA 4.0"
 licenseURL = "https://creativecommons.org/licenses/by-sa/4.0"
 favicon = "/favicon.ico"
+gtm="G-5VR1WW8LYH"
 # [permalinks]
 #   posts = '/:year/:month/:title/'
 
