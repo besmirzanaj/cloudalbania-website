@@ -8,7 +8,7 @@ pagination = 100
 enableEmoji = true
 
 # Analytics section
-googleAnalytics = 'UA-36283915-1'
+googleAnalytics = '311798158'
 
 pygmentsCodeFences = true
 pygmentsUseClasses = true
