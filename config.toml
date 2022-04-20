@@ -22,7 +22,7 @@ copyright = "Besmir Zanaj"
 license = "CC BY-SA 4.0"
 licenseURL = "https://creativecommons.org/licenses/by-sa/4.0"
 favicon = "/favicon.ico"
-
+gtm = "GTM-PSM5M76"
 # [permalinks]
 #   posts = '/:year/:month/:title/'
 
