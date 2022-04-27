@@ -1,4 +1,4 @@
-baseURL = "https://cloudalbania.com/"
+﻿baseURL = "https://cloudalbania.com/"
 languageCode = "en-us"
 title = "Besmir Zanaj"
 theme = "m10c"
