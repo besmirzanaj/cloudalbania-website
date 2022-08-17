@@ -15,13 +15,13 @@ tags:
 - [Building the docker image](#building-the-docker-image)
 - [Testing the container](#testing-the-container)
 - [Implementing echoip as a docker-compose service](#implementing-echoip-as-a-docker-compose-service)
-  - [Explaining the docker-compose traefik options](#explaining-the-docker-compose-traefik-options)
+  - [Explaining the docker-compose Traefik options](#explaining-the-docker-compose-traefik-options)
 - [Adding GeoIP data](#adding-geoip-data)
 - [Using the service](#using-the-service)
 
 ## Introduction
 
-This article describes some learning efforts for learning to deploy a service in a container enviroment, The service is deployed right now at http://ifconfig.cloudalbania.com/. 
+This article describes some learning efforts to deploy a service in a container enviroment, The service is deployed right now at http://ifconfig.cloudalbania.com/. 
 
 Repo for this article: https://github.com/besmirzanaj/echoip
 Service URL: http://ifconfig.cloudalbania.com/
@@ -54,7 +54,7 @@ After reviewing the repository I was able to quickly run the service as a docker
 
 
 ```shell
-[root@vps3 ~]# docker run --rm --detach \
+$  docker run --rm --detach \
 > --log-driver json-file --log-opt max-size=10m \
 > --cpus=1 --memory=64m --memory-reservation=64m \
 > --name echoip --hostname "$(hostname --fqdn)" \
@@ -69,27 +69,27 @@ Digest: sha256:5d113ef52bf90290758681fdb2790ff65645f20cf37ee3532440a7e66681baa2
 Status: Downloaded newer image for beszan/echoip:latest
 238bba267a61ef38669b7ae05e50d2b7e0621af45c8044e7031feba72f373d5a
 
-[root@vps3 ~]# docker ps
+$  docker ps
 CONTAINER ID   IMAGE           COMMAND                  CREATED         STATUS         PORTS                                       NAMES
 238bba267a61   beszan/echoip   "/opt/echoip/echoip …"   5 seconds ago   Up 2 seconds   0.0.0.0:8080->8080/tcp, :::8080->8080/tcp   echoip
 
-[root@vps3 ~]# curl localhost:8080
+$  curl localhost:8080
 172.17.0.1
 ```
 
-This allowed me to quickly thest the image capabilties and make sure the container could run but since the service would only listen to port 8080 it is not very practical. I needed a way to expose the service to a more reachable port such as 80 and and 443 and have the capability to imeplement a SSL cert in front of the service.
+This allowed me to quickly test the image capabilties and make sure the container could run but since the service would only listen to port 8080 it is not very practical. I needed a way to expose the service to a more reachable port such as 80 and 443, a dedicated hostname and have the capability to implement a SSL cert in front of the service.
 
 ## Implementing echoip as a docker-compose service
 
-Since I don't have a k8s cluster in production yet, I opted to run the service through a `docker-compose` file. This enabled me to place a frontend to the `echoip` container and use a more readable domain name.
+Since I don't have a k8s cluster in production yet, I opted to run the service through a `docker-compose` file. This enabled me to place a frontend to the `echoip` container and use a more friendly domain name.
 
-I chose to use `ifconfig.cloudalbania.com` for the service URL so I quickly added an A record pointing to the VPS server where docker is running. As a frontend reverse proxy for the container I used [Traefik](https://traefik.io/) since it was very easy to configure and setup.
+I chose to use `ifconfig.cloudalbania.com` for the service hostname so I added a DNS A record pointing to the VPS server where docker is running. As a frontend reverse proxy for the container I used [Traefik](https://traefik.io/) since it was very easy to configure and setup.
 
-Initial tests were started from the [quickstart](https://doc.traefik.io/traefik/getting-started/quick-start/) and then I was able to deep dive in their documentation website. We are clearly using the [docker](https://doc.traefik.io/traefik/providers/docker/) provider to allow traefik to discover docker services based on labels and the [Let's Encrypt](https://doc.traefik.io/traefik/https/acme/#configuration-examples) free SSL for our service.
+Initial tests were started from the [quickstart](https://doc.traefik.io/traefik/getting-started/quick-start/) and then I was able to deep dive in their documentation website. We are clearly using the [docker](https://doc.traefik.io/traefik/providers/docker/) provider to allow Traefik to discover docker services based on labels and the [Let's Encrypt](https://doc.traefik.io/traefik/https/acme/#configuration-examples) free SSL for our service.
 
-We will be listening to both HTTP and HTTPS ports since requests might be coming from CLI web clients such as [curl](https://curl.se/).
+We will be listening to both HTTP and HTTPS ports since requests might be coming from both web browsers and CLI clients such as [curl](https://curl.se/).
 
-After some back and forth with the concigs, in the end this is the final `docker-compose.yml` file that worked for me:
+After some back and forth with the configs, in the end this is the final `docker-compose.yml` file that worked for me:
 
 ```docker-compose
 version: "3.3"
@@ -99,7 +99,6 @@ services:
     container_name: "traefik"
     restart: always
     command:
-      #- "--log.level=DEBUG"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
@@ -146,7 +145,7 @@ services:
 
 ```
 
-To start the service you can just run once the following command to allow the service to start and also run automatically in case the underlaying OS restarts.
+To start the service you can just run once the following command. Since I am using `restart=always` for the containers, this service will start automatically in case the underlaying OS restarts.
 
 ```
 [root@vps4 echoip]# docker-compose up -d
@@ -165,14 +164,14 @@ CONTAINER ID   IMAGE                        COMMAND                  CREATED    
 [root@vps4 echoip]#
 ```
 
-### Explaining the docker-compose traefik options
+### Explaining the docker-compose Traefik options
 
-I am skipping the `docker-compose` options/configs as it is out of the scope of this article focusing more on the reverse proxy config. The traefik daemon can be configured with either ENV variables, a static configuration yml or toml file or with command arguments. In our case we are using command arguments as it is the easiest way to spin the container service
+I am skipping the `docker-compose` options/configs as it is out of the scope of this article and focusing more on the reverse proxy config. The Traefik daemon can be configured with either `ENV` variables, a static configuration `yaml` or `toml` file or with command arguments. In my case we are using command arguments as it is the easiest way to spin the container service.
 
 ```
-# Tells Traefik to use docker service discovery. This is achieved through the volume mount at `- "/var/run/docker.sock:/var/run/docker.sock:ro"`
+# Tells Traefik to use docker service discovery. This is achieved through the volume mount at `/var/run/docker.sock:/var/run/docker.sock:ro`
 --providers.docker=true
-# This parameter does not allow any other docker service exposed unelss told to do so
+# This parameter does not allow any other docker service exposed unless told to do so
 --providers.docker.exposedbydefault=false
 # listen on port 80 HTTP
 --entrypoints.web.address=:80
@@ -186,8 +185,10 @@ I am skipping the `docker-compose` options/configs as it is out of the scope of 
 
 **Let's Encrypt section**
 
+I am using the [HTTP01 challenge](https://letsencrypt.org/docs/challenge-types/#http-01-challenge) for domain verification.
+
 ```
-# Use the [HTTP01 challenge](https://letsencrypt.org/docs/challenge-types/#http-01-challenge) for domain verification
+# Use the HTTP01 ACME challenge
 --certificatesresolvers.myresolver.acme.httpchallenge=true
 # allow port 80 for Let's encrypt to do file verification
 --certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web
@@ -202,7 +203,8 @@ I am skipping the `docker-compose` options/configs as it is out of the scope of 
 ```
 # allow service to be discovered by Traefik
 traefik.enable=true
-# Listen to this hostname on HTTPS port. Notice the backticks for the hostname variable. Then when matching that hostname let traefik know this is a TLS service and user the myresolver
+# Listen to this hostname on HTTPS port. Notice the backticks for the hostname variable.
+# Then when matching that hostname let Traefik know this is a TLS service and use the "myresolver"
 # certresolver for ACME Let's Encrypt automatic certificate generation.
 traefik.http.routers.echoip-https.rule=Host(`ifconfig.cloudalbania.com`)
 traefik.http.routers.echoip-https.entrypoints=websecure
@@ -223,7 +225,36 @@ traefik.http.services.echoip-http.loadBalancer.passHostHeader=true"
 
 ## Adding GeoIP data
 
-If you notice the echoip docker container `command` it has some parameters to load GeoIP databases for countries, cities and ASNs so it can then display on the client. I created a script that will pull these databases hosted in `scripts/geoip_update.sh` to pull the neccessary databases. You have to run this script first before starting the echoip container or running `docker-compose`.
+If you notice the echoip docker container `command` it has some parameters to load GeoIP databases for countries, cities and ASNs so it can then display on the client. I wrote a BASH script that will pull these databases hosted in `scripts/geoip_update.sh` to pull the neccessary databases. You have to run this script first before starting the echoip container or running `docker-compose`.
+
+The script pulls the database files from this repo: https://github.com/P3TERX/GeoLite.mmdb. Script content below.
+
+```bash
+# Database directory
+DBDIR=/usr/share/GeoIP
+
+# Files to download
+FILES="https://git.io/GeoLite2-ASN.mmdb https://git.io/GeoLite2-City.mmdb https://git.io/GeoLite2-Country.mmdb"
+
+# If http proxy needed
+#https_proxy="http://foo.bar:3128"
+
+# DB directory
+test -w $DBDIR && cd $DBDIR 2>/dev/null || { echo "Invalid directory: $DBDIR"; exit 1; }
+
+# Sleep 0-600 sec if started from cron
+if [ ! -t 0 ]; then sleep $((RANDOM/54)); fi
+
+export https_proxy
+for f in $FILES; do
+  wget -nv -N -T 30 $f --directory-prefix=$DBDIR
+  RET=$?
+  if [ $RET -ne 0 ]; then
+    echo "wget $f failed: $RET" >&2
+    continue
+  fi
+done
+```
 
 ## Using the service
 
