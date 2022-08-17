@@ -1,5 +1,5 @@
 ---
-title: 'Hosting your own whatsmyip to get your public IP'
+title: 'Hosting your own public IP echo service'
 date: "2022-08-16"
 description: "implement a public ip echo service"
 draft: false
