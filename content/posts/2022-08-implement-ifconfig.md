@@ -229,7 +229,7 @@ If you notice the echoip docker container `command` it has some parameters to lo
 
 The service can be used from any web client, be it a gui or a cli. Example with Chrome:
 
-![ifconfig.cloudalbania.com](/ifconfig_website.jpg)
+![ifconfig.cloudalbania.com](/ifconfig_website.png)
 
 Example with CLI:
 
