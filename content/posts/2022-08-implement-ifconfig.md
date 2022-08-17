@@ -14,7 +14,7 @@ tags:
 - [The service](#the-service)
 - [Building the docker image](#building-the-docker-image)
 - [Testing the container](#testing-the-container)
-- [Implementing echoip asa docker-compose service](#implementing-echoip-asa-docker-compose-service)
+- [Implementing echoip as a docker-compose service](#implementing-echoip-as-a-docker-compose-service)
   - [Explaining the docker-compose traefik options](#explaining-the-docker-compose-traefik-options)
 - [Adding GeoIP data](#adding-geoip-data)
 - [Using the service](#using-the-service)
@@ -79,7 +79,7 @@ CONTAINER ID   IMAGE           COMMAND                  CREATED         STATUS  
 
 This allowed me to quickly thest the image capabilties and make sure the container could run but since the service would only listen to port 8080 it is not very practical. I needed a way to expose the service to a more reachable port such as 80 and and 443 and have the capability to imeplement a SSL cert in front of the service.
 
-## Implementing echoip asa docker-compose service
+## Implementing echoip as a docker-compose service
 
 Since I don't have a k8s cluster in production yet, I opted to run the service through a `docker-compose` file. This enabled me to place a frontend to the `echoip` container and use a more readable domain name.
 
@@ -149,8 +149,6 @@ services:
 To start the service you can just run once the following command to allow the service to start and also run automatically in case the underlaying OS restarts.
 
 ```
-docker-compose -d up 
-
 [root@vps4 echoip]# docker-compose up -d
 WARNING: Some services (echoip) use the 'deploy' key, which will be ignored. Compose does not support 'deploy' configuration - use `docker stack deploy` to deploy to a swarm.
 Starting traefik ... 
@@ -186,7 +184,7 @@ I am skipping the `docker-compose` options/configs as it is out of the scope of 
 --entryPoints.websecure.forwardedHeaders.trustedIPs=127.0.0.1/32,172.18.0.1/16,172.17.0.1/16
 ```
 
-Let's Encrypt section
+**Let's Encrypt section**
 
 ```
 # Use the [HTTP01 challenge](https://letsencrypt.org/docs/challenge-types/#http-01-challenge) for domain verification
@@ -199,7 +197,7 @@ Let's Encrypt section
 --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
 ```
 
-echoip service labels section
+**Echoip service labels section**
 
 ```
 # allow service to be discovered by Traefik
