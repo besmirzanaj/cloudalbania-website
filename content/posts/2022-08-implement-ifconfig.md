@@ -14,7 +14,7 @@ tags:
 - [The service](#the-service)
 - [Building the docker image](#building-the-docker-image)
 - [Testing the container](#testing-the-container)
-- [Imeplementing a proper service](#imeplementing-a-proper-service)
+- [Implementing echoip asa docker-compose service](#implementing-echoip-asa-docker-compose-service)
   - [Explaining the docker-compose traefik options](#explaining-the-docker-compose-traefik-options)
 - [Adding GeoIP data](#adding-geoip-data)
 - [Using the service](#using-the-service)
@@ -79,7 +79,7 @@ CONTAINER ID   IMAGE           COMMAND                  CREATED         STATUS  
 
 This allowed me to quickly thest the image capabilties and make sure the container could run but since the service would only listen to port 8080 it is not very practical. I needed a way to expose the service to a more reachable port such as 80 and and 443 and have the capability to imeplement a SSL cert in front of the service.
 
-## Imeplementing a proper service
+## Implementing echoip asa docker-compose service
 
 Since I don't have a k8s cluster in production yet, I opted to run the service through a `docker-compose` file. This enabled me to place a frontend to the `echoip` container and use a more readable domain name.
 
