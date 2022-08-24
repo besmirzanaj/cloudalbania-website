@@ -30,21 +30,21 @@ This work has been adopted from https://ifconfig.co/.
 
 ## The service
 
-Echo ip is a service that will echo back your public IP address. Original repo is hosted at https://ifconfig.co/ and as soon as I found out it was an opensource project that I could host myself I took the task to implement it in one of my VPS servers.
+Echoip is a service that will echo back your public IP address. Original repo is hosted at https://ifconfig.co/ and as soon as I found out it was an opensource project that I could host myself I took the task to implement it in one of my VPS servers running the docker daemon.
 
-Furthermore, the original author has implemented capabilities to read GeoIP databases and return more information on the visiting IP, such as Country, City, ASN and reverse PTR check.
+Furthermore, the original author has implemented capabilities to read GeoIP databases and return more information on the visiting IP, such as Country, City, ASN and reverse PTR check, see the section below that describes how to gat this data.
 
 ## Building the docker image
 
-Since I wanted to host my onwn container image, I opted to rebuild the container under and host it in my Docker Hub account. After authenticating with docker hub with `docker login`, I ran the following from the root directory using the exisitng `Dockerfile`:
+Since I wanted to host my own container image, I opted to rebuild the container and host it in my Docker Hub account. After authenticating with docker hub with `docker login`, I ran the following from the root directory using the exisitng `Dockerfile`:
 
 ```
-docker build -t beszan/echoip:v1.0 .
-docker tag beszan/echoip:v1.0 beszan/echoip:latest
-docker push beszan/echoip
+docker build -t beszan/echoip:v1.0 .                  # Builds the image
+docker tag beszan/echoip:v1.0 beszan/echoip:latest    # tags with latest so it is easy to use
+docker push beszan/echoip                             # push versions in docker hub
 ```
 
-The image is now hosted in my Docker Hub account.
+The image is now hosted in my Docker Hub account. You can do the same with your docker username.
 
 ## Testing the container
 
@@ -77,7 +77,7 @@ $  curl localhost:8080
 172.17.0.1
 ```
 
-This allowed me to quickly test the image capabilties and make sure the container could run but since the service would only listen to port 8080 it is not very practical. I needed a way to expose the service to a more reachable port such as 80 and 443, a dedicated hostname and have the capability to implement a SSL cert in front of the service.
+This allowed me to quickly test the image capabilties and make sure the container could run, but since the service would only listen to port 8080, it is not very practical for accessing it. I needed a way to expose the service to a more reachable port such as 80 and 443, a dedicated hostname and have the capability to implement a SSL cert in front of the service.
 
 ## Implementing echoip as a docker-compose service
 
@@ -145,7 +145,7 @@ services:
 
 ```
 
-To start the service you can just run once the following command. Since I am using `restart=always` for the containers, this service will start automatically in case the underlaying OS restarts.
+To start the service you can just run once `docker-compose up -d`. Since I am using `restart=always` for the containers, this service will start automatically in case the underlaying OS restarts.
 
 ```
 [root@vps4 echoip]# docker-compose up -d
@@ -200,9 +200,12 @@ I am using the [HTTP01 challenge](https://letsencrypt.org/docs/challenge-types/#
 
 **Echoip service labels section**
 
+These labels are under the echoip service in the `docker-compose.yml` file
+
 ```
 # allow service to be discovered by Traefik
 traefik.enable=true
+
 # Listen to this hostname on HTTPS port. Notice the backticks for the hostname variable.
 # Then when matching that hostname let Traefik know this is a TLS service and use the "myresolver"
 # certresolver for ACME Let's Encrypt automatic certificate generation.
@@ -225,7 +228,7 @@ traefik.http.services.echoip-http.loadBalancer.passHostHeader=true"
 
 ## Adding GeoIP data
 
-If you notice the echoip docker container `command` it has some parameters to load GeoIP databases for countries, cities and ASNs so it can then display on the client. I wrote a BASH script that will pull these databases hosted in `scripts/geoip_update.sh` to pull the neccessary databases. You have to run this script first before starting the echoip container or running `docker-compose`.
+If you notice the `echoip` service in the `docker-compose.yml` file, it contains the `command` section which has some parameters to load GeoIP databases for countries, cities and ASNs so it can then display on the client side. I wrote a `BASH` script that will pull these databases located in `scripts/geoip_update.sh` to pull the neccessary databases. You have to run this script first before running the `docker-compose` command.
 
 The script pulls the database files from this repo: https://github.com/P3TERX/GeoLite.mmdb. Script content below.
 
