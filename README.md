@@ -4,7 +4,7 @@
 
 Blog located at <https://cloudalbania.com>.
 
-Blog build with [Hugo](https://blog.cloudalbania.com/posts/moving-to-hugo/).
+Blog build with [Hugo](https://cloudalbania.com/posts/2021-12-moving-to-hugo/).
 
 
 ### Syncing submodules
