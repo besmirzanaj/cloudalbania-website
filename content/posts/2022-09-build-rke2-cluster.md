@@ -25,9 +25,9 @@ tags:
 
 ## Introduction
 
-I finally got my [CKA Certificate](https://www.credly.com/badges/52758172-581d-4471-8505-d7ec0be58c52/public_url) and out of curiosity started deploy not only [vanilla k8s clusters](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/) with `kubeadm` but also other kubernets flavors. One of these is the RKE2 kubernetes distribution [RKE2](https://docs.rke2.io/).
+I finally got my [CKA Certificate](https://www.credly.com/badges/52758172-581d-4471-8505-d7ec0be58c52/public_url) and out of curiosity started deploy not only vanilla k8s clusters with [`kubeadm`](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/) but also other kubernets flavors. One of these is the [RKE2](https://docs.rke2.io/) kubernetes distribution.
 
-I found several sources to install RKE2 and after reviewing them I think the [official quickstart documentation](https://docs.rke2.io/install/quickstart/) is pretty straightforward. Here I am writing a step-by-sep how-to tutorial to build a new RKE2 kubernetes cluster, manage it with Ranger and use Longhorn as a storage provider on Ubuntu Linux 22.04.01 LTS servers.
+I found several sources to install RKE2 and after reviewing them I think the [official quickstart documentation](https://docs.rke2.io/install/quickstart/) is pretty straightforward. Here I am writing a step-by-step how-to tutorial to build a new RKE2 kubernetes cluster, manage it with Ranger and use Longhorn as a storage provider on Ubuntu Linux 22.04.01 LTS servers.
 
 Recap of the tools we are going to install:
 
@@ -39,7 +39,7 @@ Recap of the tools we are going to install:
 
 Get 3-4 Linux servers from anywhere (DigitalOcean, local Proxmox/VMWare, AWS, etc.) and ensure you have `ssh` and `root` access on the nodes.
 
-In this article I am using 4 Linux Ubuntu 22.04 LTS servers with specifications shown in the table below. Note: I am using much more RAM than needed as I am using my own [homelab proxmos server](2022-01-homelab-with-proxmox-and-terraform.md).
+In this article I am using 4 Linux Ubuntu 22.04 LTS servers with specifications shown in the table below. Note: I am using much more RAM than needed as I am using my own [homelab Proxmox server](2022-01-homelab-with-proxmox-and-terraform.md).
 Another requisite is to have a DNS `A record` resolving to the control-plane node so that we can reach the Rancher web interface through an ingress. I am going to use `rancher.cloud.albania` for this purpose. We are going to use node `k8sc1` as the control-plane.
 
 |name | ip | memory | core | disk | os | role |
@@ -56,7 +56,7 @@ k8sc2 has address 192.168.88.88
 k8sc3 has address 192.168.88.89
 k8sc4 has address 192.168.88.90
 
-# rancher FQND
+# rancher FQDN
 $ host rancher.cloud.albania
 rancher.cloud.albania has address 192.168.88.87
 
