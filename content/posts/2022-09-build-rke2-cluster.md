@@ -349,7 +349,7 @@ The Rancher main screen when accessing for the first time.
 
 And after accepting the terms and conditions we are going to access the main dashboard listing the clusters managed by this Rancher instance. Notice that Rancher is a multi-cluster management tool so you can basically use it to connect to another existing cluster. Here is the [documentation](https://rancher.com/docs/rancher/v2.6/en/cluster-provisioning/registered-clusters/) on importing other clusters.
 
-![ranceher_initial_login](/rancher_initial_login.png)
+![ranceher_initial_login](/rancher_dashboard.png)
 
 ## Longhorn
 
