@@ -121,10 +121,10 @@ $ systemctl status rke2-server.service
 ```
 
 You should have something like this for the install
-![install](/static/rke2-install-master.png)
+![install](/rke2-install-master.png)
 
 And this for the service startup
-![start](/static/control-plane-installed.png)
+![start](/control-plane-installed.png)
 
 ### Using Kubernetes
 
