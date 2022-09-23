@@ -180,10 +180,10 @@ $ systemctl status rke2-agent.service
 
 The install part should look like this
 
-![agent_install](/static/agent_rke_install.png)
+![agent_install](/agent_rke_install.png)
 
 And the confirmation of the service to be running:
-![agent_running](/static/rke2_agent_running.png)
+![agent_running](/rke2_agent_running.png)
 
 Repeat now these steps for the rest of the nodes. At the end you should have a view like this
 
@@ -345,11 +345,11 @@ spec:
 
 The Rancher main screen when accessing for the first time.
 
-![ranceher_welcome_login](/static/welcome_rancher.png)
+![ranceher_welcome_login](/welcome_rancher.png)
 
 And after accepting the terms and conditions we are going to access the main dashboard listing the clusters managed by this Rancher instance. Notice that Rancher is a multi-cluster management tool so you can basically use it to connect to another existing cluster. Here is the [documentation](https://rancher.com/docs/rancher/v2.6/en/cluster-provisioning/registered-clusters/) on importing other clusters.
 
-![ranceher_initial_login](/static/rancher_initial_login.png)
+![ranceher_initial_login](/rancher_initial_login.png)
 
 ## Longhorn
 
@@ -394,8 +394,8 @@ Visit our documentation at https://longhorn.io/docs/
 
 Now Rancher is smart enough to add the Rancher tab on the side and the capabilities to enter the Longhorn GUI straight from the Rancher one.
 
-![longhorn_installed](/static/longhorn_installed.png)
+![longhorn_installed](/longhorn_installed.png)
 
 And the Longhorn GUI will look like this
 
-![longhorn_gui](/static/longhorn_main_gui.png)
+![longhorn_gui](/longhorn_main_gui.png)
