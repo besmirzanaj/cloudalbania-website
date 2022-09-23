@@ -154,7 +154,7 @@ server: https://127.0.0.1:6443
 server: https://192.168.88.87:6443
 ```
 
-Next we need to get the Node Token for joining the rest of the nodes in the cluster. The token is stored at `/var/lib/rancher/rke2/server/node-token`
+Next we need to get the `node-token` for joining the rest of the nodes in the cluster. The `node-token` is stored at `/var/lib/rancher/rke2/server/node-token`
 
 ### Agent nodes installation
 
@@ -198,7 +198,7 @@ k8sc4   Ready    <none>                      2m52s   v1.24.4+rke2r1   192.168.88
 
 ## Rancher
 
-We are going to use the latest version. information on the releases is in the [Rancher Support Matrix](https://www.suse.com/suse-rancher/support-matrix/all-supported-versions/rancher-v2-6-8/).
+We are going to use the latest Rancher version. Information on the releases is in the [Rancher Support Matrix](https://www.suse.com/suse-rancher/support-matrix/all-supported-versions/rancher-v2-6-8/).
 
 ### Rancher installation
 
