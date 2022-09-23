@@ -1,8 +1,8 @@
 ---
 title: 'Build a RKE2 kubernetes cluster with Longhorn and Rancher'
 date: "2022-09-23"
-description: "Build a RKE2 kubernetes cluster woth Longhorn and Rancher"
-draft: true
+description: "Build a RKE2 kubernetes cluster with Longhorn and Rancher"
+draft: false
 tags: 
   - kubernetes
   - k8s
@@ -25,33 +25,46 @@ tags:
 
 ## Introduction
 
-I am finally a [CKA](https://www.credly.com/badges/52758172-581d-4471-8505-d7ec0be58c52/public_url) and out of curiosity started deploy no only vanilla k8s clusters with kubeadm but also the next rancher kubernetes distribution [RKE2](https://docs.rke2.io/)
+I finally got my [CKA Certificate](https://www.credly.com/badges/52758172-581d-4471-8505-d7ec0be58c52/public_url) and out of curiosity started deploy not only [vanilla k8s clusters](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/) with `kubeadm` but also other kubernets flavors. One of these is the RKE2 kubernetes distribution [RKE2](https://docs.rke2.io/).
 
-I found several sources and after reviewing them I am writing a step-by-sep how to tutorial to build a new RKE2 cluster with Ranger and Longhorn for storage.
+I found several sources to install RKE2 and after reviewing them I think the [official quickstart documentation](https://docs.rke2.io/install/quickstart/) is pretty straightforward. Here I am writing a step-by-sep how-to tutorial to build a new RKE2 kubernetes cluster, manage it with Ranger and use Longhorn as a storage provider on Ubuntu Linux 22.04.01 LTS servers.
 
-tools we are going to install
-[RKE2](https://docs.rke2.io/) - Security focused Kubernetes
-[Rancher](https://www.suse.com/products/suse-rancher/) - Multi-Cluster Kubernetes Management
-[Longhorn](https://longhorn.io/) - Unified storage layer
+Recap of the tools we are going to install:
+
+- [RKE2](https://docs.rke2.io/) - Security focused Kubernetes
+- [Rancher](https://www.suse.com/products/suse-rancher/) - Multi-Cluster Kubernetes Management
+- [Longhorn](https://longhorn.io/) - Unified storage layer
 
 ## Prerequisites
-Get 3-4 Linux servers from anywhere (DigitalOcean, local Proxmox/VMWare, AWS, etc.) and ensure you have ssh and root access on the nodes.
 
-In this article I am using 4 Ubuntu 22.04 LTS servers with following specifications. Note I am using much more RAM than needed as I am using my own homelab. 
-Another requisite is to have a DNS A record resolving to the control-plane node so that we can reac hthe rancher interface through the web. I am going to use `rancher.cloud.albania`.
+Get 3-4 Linux servers from anywhere (DigitalOcean, local Proxmox/VMWare, AWS, etc.) and ensure you have `ssh` and `root` access on the nodes.
 
-|name | ip | memory | core | disk | os |
-|---| --- | --- | --- | --- | --- |
-|k8sc1| 192.168.88.87  | 16Gb | 4 | 30 | Ubuntu 22.04.1 LTS x64 |
-|k8sc2| 192.168.88.88  | 16Gb | 4 | 30 | Ubuntu 22.04.1 LTS x64 |
-|k8sc3| 192.168.88.89  | 16Gb | 4 | 30 | Ubuntu 22.04.1 LTS x64 |
-|k8sc4| 192.168.88.90  | 16Gb | 4 | 30 | Ubuntu 22.04.1 LTS x64 |
+In this article I am using 4 Linux Ubuntu 22.04 LTS servers with specifications shown in the table below. Note: I am using much more RAM than needed as I am using my own [homelab proxmos server](2022-01-homelab-with-proxmox-and-terraform.md).
+Another requisite is to have a DNS `A record` resolving to the control-plane node so that we can reach the Rancher web interface through an ingress. I am going to use `rancher.cloud.albania` for this purpose. We are going to use node `k8sc1` as the control-plane.
 
-Node k8sc1 will be set as control plane.
+|name | ip | memory | core | disk | os | role |
+|---| --- | --- | --- | --- | --- | --- |
+|k8sc1| 192.168.88.87  | 16Gb | 4 | 30 | Ubuntu 22.04.1 LTS x64 | control-plane |
+|k8sc2| 192.168.88.88  | 16Gb | 4 | 30 | Ubuntu 22.04.1 LTS x64 | worker node |
+|k8sc3| 192.168.88.89  | 16Gb | 4 | 30 | Ubuntu 22.04.1 LTS x64 | worker node |
+|k8sc4| 192.168.88.90  | 16Gb | 4 | 30 | Ubuntu 22.04.1 LTS x64 | worker node |
+
+```bash
+ $ for i in {1..4};do host k8sc$i; done
+k8sc1 has address 192.168.88.87
+k8sc2 has address 192.168.88.88
+k8sc3 has address 192.168.88.89
+k8sc4 has address 192.168.88.90
+
+# rancher FQND
+$ host rancher.cloud.albania
+rancher.cloud.albania has address 192.168.88.87
+
+```
 
 ### Prepare the nodes
 
-Run on all nodes the following as root:
+Run on all nodes the following as root.
 
 ```bash
 $ sudo -i
@@ -59,35 +72,63 @@ $ apt update
 $ apt upgrade -y
 ```
 
-## Installing RKE2
-
-Since RKE2 does not provide a DEB repository we are going to use [their scripted method](https://docs.rke2.io/install/quickstart/). On the master node, `k8sc1`, login as root and run the following commands. These might take some time to complete as RKE2 will have to download all needed control-plane container images from internet.
+Also make sure to have these firewall ports open for either inter-cluster commmunication and also to allow outside reachability for the services. Some of the ports that k8s uses are also documented [here](https://kubernetes.io/docs/reference/ports-and-protocols/).
 
 ```bash
-curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE=server sh - 
+$ ufw allow 22/tcp # SSH
+$ ufw allow 53/tcp # DNS
+$ ufw allow 53/udp # DNS
+$ ufw allow 80/tcp # HTTP clients
+$ ufw allow 80/udp # HTTPS Clients
+$ ufw allow 179/tcp # if we're using BGP peering in calico or metallb
+$ ufw allow 443/tcp # HTTPS Clients
+$ ufw allow 443/udp # HTTPS Clients
+$ ufw allow 8080/tcp # Generic alternative HTTP serving port
+$ ufw allow 8443/tcp # Generic alternative HTTPS serving port
+$ ufw allow 2379:2380/tcp # Etcd
+$ ufw allow 6443/tcp # k8s api
+$ ufw allow 7946/tcp # optional if using metallb
+$ ufw allow 7946/udp # optional if using metallb
+$ ufw allow 8472/udp # optional if flannel overlay network - vxlan backend
+$ ufw allow 9153/tcp # CoreDNS
+$ ufw allow 9153/udp # CoreDNS
+$ ufw allow 9402/tcp # CertMAnager port
+$ ufw allow 10250:10255/tcp # Kubelet port
+$ ufw allow 30000:32767/tcp # allow nodeports
+# finally configure the firewall for the RKE2 service
+$ ufw allow 9345/tcp # RKE2 listen port
 
-# start and enable the rke2-server.service 
-systemctl enable --now rke2-server.service
-
-# finally configure the firewall for the control place
-$ ufw allow 9345/tcp
+$ ufw --force enable
 ```
 
-And that is it. We have a new kubernetes up and running. Verify the service is up and running before proceeding on the next steps.
+## Installing RKE2
 
+Since RKE2 does not provide a DEB repository, we are going to use [their scripted method](https://docs.rke2.io/install/quickstart/). On the master node, `k8sc1`, login as `root` and run the following commands. These might take some time to complete as RKE2 will have to download all needed control-plane container images from internet. RKE2 has a full list of [install options](https://docs.rke2.io/install/install_options/install_options/) that you can further customize your ncluster config.
+
+```bash
+# Get and run the installer script
+curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE=server sh - 
+
+# Start and enable the rke2-server.service
+systemctl enable --now rke2-server.service
+
+```
+
+And that is it. We have a new kubernetes cluster up and running (yes a one node kubernetes cluster 😀 ). Verify the service is up and running before proceeding on the next steps.
 
 ```bash
 $ systemctl status rke2-server.service 
 ```
 
 You should have something like this for the install
-![install](/rke2-install-master.png)
+![install](/static/rke2-install-master.png)
 
 And this for the service startup
-![start](/control-plane-installed.png)
+![start](/static/control-plane-installed.png)
 
 ### Using Kubernetes
-Now we can start interfacing ourselves to the newly built kubernetes cluster. I am going to still run the commands as root on the control-plane node for now.
+
+Now we can start interfacing ourselves to the newly built kubernetes cluster. I am going to still run the commands as `root` on the control-plane node for now.
 
 ```bash
 # lets create a symlink for kubectl just in case the PATH has not been updated
@@ -103,10 +144,9 @@ NAME    STATUS   ROLES                       AGE     VERSION
 k8sc1   Ready    control-plane,etcd,master   7m14s   v1.24.4+rke2r1
 ```
 
-If we want to use the same config file to manage the cluster from our workstation then we need to copy the /etc/rancher/rke2/rke2.yaml file to our $HOME/.kube/config and then edit the 
-server variable from the default one to the external IP of the server. In this case I need to change to the IP address of my `k8sc1` node:
+Note: If we want to manage the cluster from our workstation then we need to copy the `/etc/rancher/rke2/rke2.yaml` file to our `$HOME/.kube/config` and then edit the `server` variable from the default one to the IP of the control-plane server. In this case I need to change to the IP address of my `k8sc1` node:
 
-```
+```bash
 # from this
 server: https://127.0.0.1:6443
 
@@ -114,11 +154,11 @@ server: https://127.0.0.1:6443
 server: https://192.168.88.87:6443
 ```
 
-Next we need to get the Node Token for joining the rest of the tokes in the cluster. The token is stored at `/var/lib/rancher/rke2/server/node-token`
+Next we need to get the Node Token for joining the rest of the nodes in the cluster. The token is stored at `/var/lib/rancher/rke2/server/node-token`
 
 ### Agent nodes installation
 
-The agent [installation on the nodes](https://docs.rke2.io/install/quickstart/#linux-agent-worker-node-installation) is similar to the control nodes one. We will need two more things before we start the rke2 service: a config file to tell the node which server is the control-plane and the join `TOKEN` itself.
+The RKE2 agent mode [installation on the nodes](https://docs.rke2.io/install/quickstart/#linux-agent-worker-node-installation) is similar to the control nodes one. We will need two more things before we start the RKE2 service: a config file to tell the node which server is the control-plane and the join `TOKEN` itself.
 
 ```bash
 # worker nodes are added with INSTALL_RKE2_TYPE=agent
@@ -140,10 +180,10 @@ $ systemctl status rke2-agent.service
 
 The install part should look like this
 
-![agent_install](/agent_rke_install.png)
+![agent_install](/static/agent_rke_install.png)
 
 And the confirmation of the service to be running:
-![agent_running](/rke2_agent_running.png)
+![agent_running](/static/rke2_agent_running.png)
 
 Repeat now these steps for the rest of the nodes. At the end you should have a view like this
 
@@ -166,8 +206,7 @@ In order to install the rest of the featues, including Rancher, we will need [He
 
 
 ```bash
-# On the control plane node as root
-# add helm
+# On the control plane node as root, add helm
 $ curl -#L https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
 # add needed helm repo charts
@@ -175,7 +214,7 @@ $ helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
 $ helm repo add jetstack https://charts.jetstack.io
 ```
 
-Note: Cert-manager is used to generate the self singing TLS certificates. Fix your FQDN we set above to your own when runnig the `helm` chart install for the `hostname` variable.
+Now lets start installing the Rancher elements. Note: Cert-Manager is used to generate the self singing TLS certificates. When runnig the `helm` chart install for Rancher, use the FQDN we set above for the `hostname` variable, in this case `rancher.cloud.albania`.
 
 Notice from this example I am using an admin password of `AVeryD1fficulP@@ssword` for the rancher interface, please change accordingly.
 
@@ -189,8 +228,10 @@ customresourcedefinition.apiextensions.k8s.io/challenges.acme.cert-manager.io cr
 customresourcedefinition.apiextensions.k8s.io/clusterissuers.cert-manager.io created
 customresourcedefinition.apiextensions.k8s.io/issuers.cert-manager.io created
 customresourcedefinition.apiextensions.k8s.io/orders.acme.cert-manager.io created
+```
 
-# helm install jetstack
+```bash
+# helm install jetstack/cert-manager
 $ helm upgrade -i cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace
 Release "cert-manager" does not exist. Installing it now.
 NAME: cert-manager
@@ -215,7 +256,9 @@ Certificates for Ingress resources, take a look at the `ingress-shim`
 documentation:
 
 https://cert-manager.io/docs/usage/ingress/
+```
 
+```bash
 # helm install rancher
 $ helm upgrade -i rancher rancher-latest/rancher --create-namespace --namespace cattle-system --set hostname="rancher.cloud.albania" --set bootstrapPassword="AVeryD1fficulP@@ssword" --set replicas=1
 Release "rancher" does not exist. Installing it now.
@@ -236,15 +279,11 @@ If you provided your own bootstrap password during installation, browse to https
 
 If this is the first time you installed Rancher, get started by running this command and clicking the URL it generates:
 
-```
 echo https://rancher.cloud.albania/dashboard/?setup=$(kubectl get secret --namespace cattle-system bootstrap-secret -o go-template='{{.data.bootstrapPassword|base64decode}}')
-```
 
 To get just the bootstrap password on its own, run:
 
-```
 kubectl get secret --namespace cattle-system bootstrap-secret -o go-template='{{.data.bootstrapPassword|base64decode}}{{ "\n" }}'
-```
 
 
 Happy Containering!
@@ -252,21 +291,73 @@ Happy Containering!
 
 ### Accessing the Rancher GUI
 
-Now that the cluster is up and running we can go to the web GUI at https://rancher.cloud.albania and login with the password we set above
+Now that the kubernetes cluster and Rancher are up and running, we can access the web GUI at https://rancher.cloud.albania and login with the password we set above. We can do this since the helm chart installed an `Ingress` for us that forwards the requests for https://rancher.cloud.albania to the Rancher `Service` in the `cattle-system` namespace. Here I am including the Rancher ingress and service for visibility.
 
-![ranceher_welcome_login](/welcome_rancher.png)
+```bash
+$ kubectl get ingress -n cattle-system rancher -o yaml 
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+...
+  name: rancher
+  namespace: cattle-system
+spec:
+  rules:
+  - host: rancher.cloud.albania
+    http:
+      paths:
+      - backend:
+          service:
+            name: rancher
+            port:
+              number: 80
+        pathType: ImplementationSpecific
+  tls:
+  - hosts:
+    - rancher.cloud.albania
+    secretName: tls-rancher-ingress
+```
 
-And after accepting the terms and conditions you are going to access the main dashboard listing the clusters managed by this Rancher instance. Notice that Rancher is a multi-cluster management tool so you can basically use it to connect to another existing cluster. Here is the [documentation](https://rancher.com/docs/rancher/v2.6/en/cluster-provisioning/registered-clusters/) on importing other clusters.
+The Rancher service:
 
-![ranceher_initial_login](/rancher_initial_login.png)
+```bash
+$ kubectl -n cattle-system get svc rancher -o yaml
+apiVersion: v1
+kind: Service
+metadata:
+...
+  name: rancher
+  namespace: cattle-system
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  - name: https-internal
+    port: 443
+    protocol: TCP
+    targetPort: 444
+...
+  type: ClusterIP
+
+```
+
+The Rancher main screen when accessing for the first time.
+
+![ranceher_welcome_login](/static/welcome_rancher.png)
+
+And after accepting the terms and conditions we are going to access the main dashboard listing the clusters managed by this Rancher instance. Notice that Rancher is a multi-cluster management tool so you can basically use it to connect to another existing cluster. Here is the [documentation](https://rancher.com/docs/rancher/v2.6/en/cluster-provisioning/registered-clusters/) on importing other clusters.
+
+![ranceher_initial_login](/static/rancher_initial_login.png)
 
 ## Longhorn
 
-As per their [website](https://longhorn.io/), Longhorn is a cloud native distributed block storage for Kubernetes. Read in their website documentation for more understanding how Longhorn works.
+As per their [website](https://longhorn.io/), Longhorn is a cloud native distributed block storage for Kubernetes. Read in their documentation website for more understanding on how Longhorn works. We are going to use this storage provider for our pods and Longhorn will take care that the PVC can use this storage class.
 
 ### Longhorn Install
 
-There are [different ways](https://longhorn.io/docs/1.2.4/deploy/install/) to install Longhorn but since we have Helm already installed we are going to use that way.
+There are [different ways](https://longhorn.io/docs/1.2.4/deploy/install/) to install Longhorn but since we have Helm already installed we are going to use it for the install process.
 
 ```bash
 # get the Longhorn repo chart
@@ -307,4 +398,4 @@ Now Rancher is smart enough to add the Rancher tab on the side and the capabilit
 
 And the Longhorn GUI will look like this
 
-![longhorn_gui](/longhorn_main_gui.png)
+![longhorn_gui](/static/longhorn_main_gui.png)
