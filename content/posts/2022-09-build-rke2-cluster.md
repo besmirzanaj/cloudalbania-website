@@ -218,10 +218,12 @@ Now lets start installing the Rancher elements. Note: Cert-Manager is used to ge
 
 Notice from this example I am using an admin password of `AVeryD1fficulP@@ssword` for the rancher interface, please change accordingly.
 
+Let's start. On the control plane node as root, add the cert-manager CRD. [This is needed](https://cert-manager.io/docs/installation/helm/#3-install-customresourcedefinitions) so that when we install the helm chart we avoid the chicken/egg problen of certificate generation.
+
 ```bash
-# On the control plane node as root
-# add the cert-manager CRD
-$ kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.6.1/cert-manager.crds.yaml
+
+$ kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.9.1/cert-manager.crds.yaml
+
 customresourcedefinition.apiextensions.k8s.io/certificaterequests.cert-manager.io created
 customresourcedefinition.apiextensions.k8s.io/certificates.cert-manager.io created
 customresourcedefinition.apiextensions.k8s.io/challenges.acme.cert-manager.io created
@@ -230,9 +232,11 @@ customresourcedefinition.apiextensions.k8s.io/issuers.cert-manager.io created
 customresourcedefinition.apiextensions.k8s.io/orders.acme.cert-manager.io created
 ```
 
+Now let's install the cert-manager helm chart.
+
 ```bash
-# helm install jetstack/cert-manager
 $ helm upgrade -i cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace
+
 Release "cert-manager" does not exist. Installing it now.
 NAME: cert-manager
 LAST DEPLOYED: Thu Sep 22 20:14:55 2022
@@ -258,8 +262,9 @@ documentation:
 https://cert-manager.io/docs/usage/ingress/
 ```
 
+Finally now we can install Rancher with helm
+
 ```bash
-# helm install rancher
 $ helm upgrade -i rancher rancher-latest/rancher \
       --create-namespace --namespace cattle-system \
       --set hostname="rancher.cloud.albania" \
@@ -293,6 +298,10 @@ kubectl get secret --namespace cattle-system bootstrap-secret -o go-template='{{
 
 Happy Containering!
 ```
+
+Rancher is now up and ready to be used:
+
+
 
 ### Accessing the Rancher GUI
 
