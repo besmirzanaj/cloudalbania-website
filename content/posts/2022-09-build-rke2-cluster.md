@@ -260,7 +260,12 @@ https://cert-manager.io/docs/usage/ingress/
 
 ```bash
 # helm install rancher
-$ helm upgrade -i rancher rancher-latest/rancher --create-namespace --namespace cattle-system --set hostname="rancher.cloud.albania" --set bootstrapPassword="AVeryD1fficulP@@ssword" --set replicas=1
+$ helm upgrade -i rancher rancher-latest/rancher \
+      --create-namespace --namespace cattle-system \
+      --set hostname="rancher.cloud.albania" \
+      --set bootstrapPassword="AVeryD1fficulP@@ssword" \
+      --set replicas=1
+
 Release "rancher" does not exist. Installing it now.
 NAME: rancher
 LAST DEPLOYED: Thu Sep 22 20:20:51 2022
@@ -291,7 +296,7 @@ Happy Containering!
 
 ### Accessing the Rancher GUI
 
-Now that the kubernetes cluster and Rancher are up and running, we can access the web GUI at https://rancher.cloud.albania and login with the password we set above. We can do this since the helm chart installed an `Ingress` for us that forwards the requests for https://rancher.cloud.albania to the Rancher `Service` in the `cattle-system` namespace. Here I am including the Rancher ingress and service for visibility.
+Now that the kubernetes cluster and Rancher are up and running, we can access the web GUI at https://rancher.cloud.albania and login with the password we set above. We can do this since the helm chart installed an `Ingress` for us that forwards the requests for https://rancher.cloud.albania to the Rancher `Service` in the `cattle-system` namespace. Here is the Rancher ingress and service for visibility.
 
 ```bash
 $ kubectl get ingress -n cattle-system rancher -o yaml 
