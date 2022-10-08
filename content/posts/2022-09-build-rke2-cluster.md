@@ -299,9 +299,21 @@ kubectl get secret --namespace cattle-system bootstrap-secret -o go-template='{{
 Happy Containering!
 ```
 
-Rancher is now up and ready to be used:
+Rancher is now up and ready to be used
 
+```bash
+$ curl -kI https://rancher.cloud.albania
 
+HTTP/2 200 
+date: Sat, 08 Oct 2022 09:37:01 GMT
+content-type: application/json
+cache-control: no-cache, no-store, must-revalidate
+expires: Wed 24 Feb 1982 18:42:00 GMT
+x-api-cattle-auth: false
+x-api-schemas: https://rancher.cloud.albania/meta/schemas
+x-content-type-options: nosniff
+strict-transport-security: max-age=15724800; includeSubDomains
+```
 
 ### Accessing the Rancher GUI
 
