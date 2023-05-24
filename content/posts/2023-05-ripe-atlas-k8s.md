@@ -28,7 +28,7 @@ What is RIPE Atlas? - [RIPE Atlas](https://atlas.ripe.net/) is a global network 
 
 After you received the probe and register it in the Atlas website, the probe will show in the atlas portal https://atlas.ripe.net/probes/
 
-![RIPE Atlas Portal](/static/ripe-atlas-probe-portal.png)
+![RIPE Atlas Portal](/ripe-atlas-probe-portal.png)
 
 In order to allow more users to host the probes, lack of probes availability and lower maintenance (the USB sticks would break intermittently) [RIPE opensourced](https://atlas.ripe.net/docs/howtos/software-probes.html) the probe software so that it could be compiled and hosted on a PC or VM.
 
@@ -208,7 +208,7 @@ Now it is time to register our new probe at the [registration website](https://a
 
 Then go back to the [probes portal](https://atlas.ripe.net/probes/) where you will see you newly created software probe like this
 
-![RIPE Atlas Portal Probes](/static/ripe-atlas-new-probe.png)
+![RIPE Atlas Portal Probes](/ripe-atlas-new-probe.png)
 
 After a few minutes the probe will get registered in the RIPE Atlas servers. You can check the pod logs and look for a `initiating  KEEP connection` string like this
 
@@ -257,4 +257,4 @@ initiating  KEEP connection to -R 52631 -p  443 ctr-hel09.atlas.ripe.net
 
 After the `KEEP connection`  message shows in the logs you can now verify that the probe is successfully connected to the RIPE Atlas backend.
 
-![RIPE Atlas Portal Probes](/static/ripe-atlas-probe-running.png)
+![RIPE Atlas Portal Probes](/ripe-atlas-probe-running.png)
