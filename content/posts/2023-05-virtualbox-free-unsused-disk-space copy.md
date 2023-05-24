@@ -23,7 +23,7 @@ When using Virtualbox, after creating the VMs, and even after specifying their d
 
 To mitigate this we have to run a command from the cli to let the guest OS know that it can treat the provided disk as a SSD one.
 
-NOTE: This guide is for Linux guest OSs, if you run this on a pre-exsisting Windows VM you will make that VM almost useless.
+NOTE: This guide is for Linux guest OSs, if you run this on a pre-existing Windows VM you will make that VM almost useless.
 
 ## Prerequisites
 
@@ -49,7 +49,7 @@ VBoxManage storageattach "GuestOsMachineName" --storagectl "SATA" --port 0 --dev
 Linux
 
 ```shell
-$ vboxmanage storageattach "GuestOsMachineName" --storagectl "SATA" --port 0 --device 0 --nonrotational on --discard on
+vboxmanage storageattach "GuestOsMachineName" --storagectl "SATA" --port 0 --device 0 --nonrotational on --discard on
 ```
 
 ### On the VM

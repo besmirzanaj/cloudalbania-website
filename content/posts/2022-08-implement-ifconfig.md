@@ -340,23 +340,25 @@ The main difference in our `docker-compose.yml` file is the socket path for podm
 After this change is implemented we can now start the containers with `podman-compose up -d`.
 
 ### Autostarting Podman containers
+
 One issue with podman is the restart policy: The containers will not restart automatically after our server reboots. If we look at the `podman-run` [`--restart` man page](https://docs.podman.io/en/latest/markdown/podman-run.1.html#restart-policy) we will notice that the `--restart` option will not start the container(s) again when the system reboots. It says:
 
 > Please note that `--restart` will not restart containers after a system reboot.
 
-This is different than Docker and the reason behind this behaviour is Podman's daemon-less architecture. The containers managed by Docker respect this for every reboot because the Docker daemon starts at boot and starts the specified containers. On the same `man` page you will notice the recommendation:
+This is different than Docker and the reason behind this behavior is Podman's daemon-less architecture. The containers managed by Docker respect this for every reboot because the Docker daemon starts at boot and starts the specified containers. On the same `man` page you will notice the recommendation:
 
 > Podman provides a systemd unit file, `podman-restart.service`, which restarts containers after a system reboot.
 > If container will run as a system service, generate a systemd unit file to manage it. See podman generate systemd.
 
 #### Implement container autostart with podman
 
-In order to allow containers to autostart with podman we will follow the recommended way: enable the `podman-restart.service` systemd unit. 
+In order to allow containers to autostart with podman we will follow the recommended way: enable the `podman-restart.service` systemd unit.
 
 ```bash
 [root@hostname ~]# systemctl enable --now podman-restart.service
 Created symlink /etc/systemd/system/default.target.wants/podman-restart.service → /usr/lib/systemd/system/podman-restart.service.
 ```
+
 Now we can run our `podman-compose` commands and the `restart` policy will be applied from the newly enabled `podman-restart.service` systemd unit.
 
-The next time the system will reboot, the containers will be up and running
+The next time the system will reboot, the containers will be up and running.
