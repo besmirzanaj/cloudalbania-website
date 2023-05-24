@@ -18,6 +18,11 @@ tags:
   - [Explaining the docker-compose Traefik options](#explaining-the-docker-compose-traefik-options)
 - [Adding GeoIP data](#adding-geoip-data)
 - [Using the service](#using-the-service)
+- [Update 2023-05 - Implementing with Podman instead of Docker](#update-2023-05---implementing-with-podman-instead-of-docker)
+  - [Installing podman packages](#installing-podman-packages)
+  - [Adopting docker-compose files](#adopting-docker-compose-files)
+  - [Autostarting Podman containers](#autostarting-podman-containers)
+    - [Implement container autostart with podman](#implement-container-autostart-with-podman)
 
 ## Introduction
 
@@ -148,7 +153,7 @@ services:
 To start the service you can just run once `docker-compose up -d`. Since I am using `restart=always` for the containers, this service will start automatically in case the underlaying OS restarts.
 
 ```
-[root@vps4 echoip]# docker-compose up -d
+[root@hostname echoip]# docker-compose up -d
 WARNING: Some services (echoip) use the 'deploy' key, which will be ignored. Compose does not support 'deploy' configuration - use `docker stack deploy` to deploy to a swarm.
 Starting traefik ... 
 Starting traefik ... done
@@ -157,11 +162,11 @@ Starting traefik ... done
 Checking containers
 
 ```
-[root@vps4 echoip]# docker ps | grep -E 'echo|traefik|CONTA'
+[root@hostname echoip]# docker ps | grep -E 'echo|traefik|CONTA'
 CONTAINER ID   IMAGE                        COMMAND                  CREATED         STATUS              PORTS                                                                      NAMES
 8683b586bd15   traefik:v2.8                 "/entrypoint.sh --pr…"   8 hours ago     Up About a minute   0.0.0.0:80->80/tcp, :::80->80/tcp, 0.0.0.0:443->443/tcp, :::443->443/tcp   traefik
 59eb6310a309   beszan/echoip:v1.5           "/opt/echoip/echoip …"   8 hours ago     Up About a minute   8080/tcp                                                                   echoip
-[root@vps4 echoip]#
+[root@hostname echoip]#
 ```
 
 ### Explaining the docker-compose Traefik options
@@ -299,3 +304,59 @@ $  curl ifconfig.cloudalbania.com/json
   }
 }
 ```
+
+## Update 2023-05 - Implementing with Podman instead of Docker
+
+Recently I migrated my servers from CentOS 7 to RockyLinux 9 and one of the built-in tools in the default (AppStream) repos is [Podman](https://podman.io/). There are several benefits to using podman where the main two are the capability to run containers without being an admin (root) and the other to not rely on a daemon for the container service.
+
+### Installing podman packages
+
+To make the docker-compose files work with podman we will need to install podman-compose from the EPEL repo:
+
+```bash
+dnf install -y epel-release
+```
+
+Then install the `podman` packages:
+
+```bash
+dnf install -y podman-compose podman
+```
+
+From here we are ready to start working with containers. See? No need to start any service/daemon.
+
+### Adopting docker-compose files
+
+The main difference in our `docker-compose.yml` file is the socket path for podman.
+
+```bash
+[root@hostname ]# diff docker-compose.yml podman-compose.yml
+
+<       - "/var/run/podman/podman.sock:/var/run/docker.sock:ro"
+---
+>       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+```
+
+After this change is implemented we can now start the containers with `podman-compose up -d`.
+
+### Autostarting Podman containers
+One issue with podman is the restart policy: The containers will not restart automatically after our server reboots. If we look at the `podman-run` [`--restart` man page](https://docs.podman.io/en/latest/markdown/podman-run.1.html#restart-policy) we will notice that the `--restart` option will not start the container(s) again when the system reboots. It says:
+
+> Please note that `--restart` will not restart containers after a system reboot.
+
+This is different than Docker and the reason behind this behaviour is Podman's daemon-less architecture. The containers managed by Docker respect this for every reboot because the Docker daemon starts at boot and starts the specified containers. On the same `man` page you will notice the recommendation:
+
+> Podman provides a systemd unit file, `podman-restart.service`, which restarts containers after a system reboot.
+> If container will run as a system service, generate a systemd unit file to manage it. See podman generate systemd.
+
+#### Implement container autostart with podman
+
+In order to allow containers to autostart with podman we will follow the recommended way: enable the `podman-restart.service` systemd unit. 
+
+```bash
+[root@hostname ~]# systemctl enable --now podman-restart.service
+Created symlink /etc/systemd/system/default.target.wants/podman-restart.service → /usr/lib/systemd/system/podman-restart.service.
+```
+Now we can run our `podman-compose` commands and the `restart` policy will be applied from the newly enabled `podman-restart.service` systemd unit.
+
+The next time the system will reboot, the containers will be up and running
