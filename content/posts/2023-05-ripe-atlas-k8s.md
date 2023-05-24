@@ -116,7 +116,7 @@ c1e8mjZP1HUm8WuPQkXbTnpBa9SWQ2cNqlxopRcz14q4XqCJ6ProcCRXLVUX6czFGhK9xj
 ...
 
 # Public key
-$ kubectl  get secrets -n ripe-atlas ripe-atlas2 -o json | jq '.data."probe_key.pub"' -r | base64 -d
+$ kubectl  get secrets -n ripe-atlas ripe-atlas -o json | jq '.data."probe_key.pub"' -r | base64 -d
 
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDaC90EzGsW0/axEGlFlqXwgArZfKOWXv0wKRBqdH7ncxc7Cj/CGuDCTBWA/GNN2ZVDdyqsSMe7I8rnq3hNaI1lQ1O4HQJyL0pLL7XCMEKjCdkzmixoi4pxZ+JrP8yeGzeiJk14IXCYC8KEY1yYrINaDwqMTT/BGQ6Keog6jarfqyBoi05y7JIkN4bMHJXV5n4tZJLVHMs40BcsdTz5ye1C2lpOVURLk1002TNDE/cql4+N2ubrNNsW7lA5XG01uzr2AWPae8bSxqSplM/5SbpLRDTNW1DPi+8sE7dpDm4TRUzA7zq62qd+5U2u2F6wxvqdCGPY2CwGnZ9zV7yaNk/UdSbxa49CRdtOekFr1JZDZw2qXGilFzPXirheoIno+uhwJFctVRfpzMUaEr3GPhQF+swJOnjy/4Q2+Ehzd4yq/oSWPFxE5GwJz/Y94Gbq9yXJrxp7Fvh4GXDcc2svEsC7NPBOOTMa9ksreY89yWxh6a/dJz0WHv+M8nHDWrT/grX8BqimXD+qHAfYrZUkA1te+eIzqxrteUfp0h6api5dUALBnP5lce5C499jJUj6fvgi6WNDuj4qW/Aj79w+6WTaTo0K6LIEoK7Qu27pQo86u+cQO2YnY2nFTLlIdpNsrzhG7eGGrUZPxIKBrLTDWm1YLUAtVA/s5SKXo57zO5Jfgw== atlas-ripe-key
 ```
