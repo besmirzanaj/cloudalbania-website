@@ -185,4 +185,4 @@ If we run again the playbook there will be no changes
 
 ![foreman_organization_rerun](/foreman_organization_rerun.png)
 
-This is the end of this guide. Will follow up with a more detailed Day 1 configurations.
+This is the end of this guide. 

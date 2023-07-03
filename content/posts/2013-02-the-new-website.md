@@ -11,4 +11,4 @@ Welcome :)
 
 I created this blog to log sysadmin and cloud systems activities or articles.
 
-Thank you, and good stacking!
+Thank you, and good reading!
