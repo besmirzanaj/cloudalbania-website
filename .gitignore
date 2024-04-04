@@ -5,3 +5,4 @@ backup/
 ./backup/*
 .hugo_build.lock
 .vscode/
+resources/
