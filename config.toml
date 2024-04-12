@@ -16,7 +16,7 @@ pygmentsUseClasses = true
 #  theme params
 [params]
 author = "Besmir Zanaj"
-description = "Personal blog where I cover my experiences and best practices with System Administration and DevOps"
+description = "Personal blog where I cover my experiences and best practices as a System Admin and DevOps Engineer"
 avatar = "/profile.png"
 copyright = "Besmir Zanaj"
 license = "CC BY-SA 4.0"
