@@ -203,4 +203,4 @@ dns02$ crontab -l | grep sync
 00 */12 * * * /root/technitium-sync.sh
 ```
 
-Now our servers are synced and configured as primary backup for our local network.
+Now our servers are synced and configured with high availability for our local network.
