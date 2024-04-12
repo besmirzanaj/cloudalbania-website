@@ -1,8 +1,8 @@
 ---
-title: 'Setup an HA Technitium DNS cluster at home'
+title: 'Setup an High Availability Technitium DNS server cluster at home'
 date: "2024-04-03"
 description: "Setup an HA Technitium DNS cluster at home"
-draft: true
+draft: false
 tags: 
   - technitium
   - homelab
@@ -19,23 +19,25 @@ tags:
 
 ## Introduction
 
-[Technitium DNS Server](https://technitium.com/dns/) is a really interesting DNS server that you can use in your homelab. I have gone from [pi-hole ](https://pi-hole.net/) to [AdGuard Home](https://adguard.com/en/adguard-home/overview.html) and while I really liked the minimalistic design and footprint of AdGuard Home, it had some issues when creating custom DNS records to use in a more advanced homelab scenario. The main painpoint for me was terraform integration. While there are both terraform plugins for [pihole](https://registry.terraform.io/providers/ryanwholey/pihole/latest/docs/resources/dns_record) and [AdGuard Home](https://registry.terraform.io/providers/gmichels/adguard/latest/docs/resources/user_rules) using them gave me stability issues in pihole and never working in AdGuard Home.
+[Technitium DNS Server](https://technitium.com/dns/) is a really interesting DNS server that you can use in your homelab. I have gone from [pi-hole ](https://pi-hole.net/) to [AdGuard Home](https://adguard.com/en/adguard-home/overview.html) and while I really liked the minimalistic design and footprint of AdGuard Home, it had some issues when creating custom DNS records in a more advanced homelab scenario. The main painpoint for me was terraform integration. While there are both terraform plugins for [pihole](https://registry.terraform.io/providers/ryanwholey/pihole/latest/docs/resources/dns_record) and [AdGuard Home](https://registry.terraform.io/providers/gmichels/adguard/latest/docs/resources/user_rules) using them gave me stability issues in pihole and never working in AdGuard Home.
 
-After looking for a new solution I found in a Reddit post about Technitium and that it is an open source authoritative as well as recursive DNS server.
+After looking for a new solution I found in a Reddit post about Technitium and that it is an open source authoritative as well as recursive DNS server. It can also provide `DHCP` just like the other solutions.
 
-In this article I am going to install technitium in a docker container as a primary DNS server and on a RaspberryPi as a backup DNS server. After settting these up, I will enable a `cron` job on the secondary DNS server to pull and sync the configurations from the primary DNS server periodically to keep them in sync.
+In this article I am going to install Technitium in a docker container as a primary DNS server ()`dns01.home.arpa`) and on a RaspberryPi as a backup DNS server (`dns02.home.arpa`). After settting these up, I will enable a `cron` job on the secondary DNS server to pull and sync the configurations from the primary DNS server periodically to keep them in sync.
+
+This job will take into account that the imported data is then customized on the destinaition Raspberry PI server such as the `DNS Server Domain` and the `DHCP` server status. We do not want a second conflicting `DHCP` server in our local net. I opted to manually enable the `DHCP` server on the second server in case of primary server failure.
 
 ## Prerequisites for Technitium DNS
 
 Any recent OS should work. I am focusing on Linux systems in this article. Make sure to install `gzip` and `tar` beforehand as the installer script requires these packages.
 
-You can install it as a systemd daemon (on a VM or a raspberrypi) or use the provided [`docker-compose.yml`](https://github.com/TechnitiumSoftware/DnsServer/blob/master/docker-compose.yml) file. To use `docker` and `docker-compose` (or `podman`) you need to [install](https://docs.docker.com/engine/install/) them first ([docker-compose install document](https://docs.docker.com/compose/install/linux/)).
+You can install it as a `systemd` daemon (on a VM or a Raspberry PI) or run in a docker container with the the provided [docker-compose.yml](https://github.com/TechnitiumSoftware/DnsServer/blob/master/docker-compose.yml) file. To use `docker` and `docker-compose` (or `podman`) you need to [install](https://docs.docker.com/engine/install/) them first ([docker-compose install document](https://docs.docker.com/compose/install/linux/)).
 
 ## Technitium installation procedure
 
-For the sake of the examples, let's assume the primary server has an IP address `192.168.100.5` and hostname `dns01.home.arpa` and the secondary server (our raspberrypi) has an IP address `192.168.100.6` and hostname `dns02.home.arpa`.
+In this article I am defining a primary server with an IP address `192.168.100.5` and hostname `dns01.home.arpa` and the secondary server (our Raspberry PI) with an IP address `192.168.100.6` and hostname `dns02.home.arpa`.
 
-NOTE: this article will not describe how to configure technitium.
+NOTE: This article will not describe [how to configure Technitium](https://technitium.com/dns/help.html), rather than get the neccessary information from the GUI, such as the admin API token.
 
 ### On the docker host
 
@@ -64,55 +66,32 @@ services:
       - DNS_SERVER_ADMIN_PASSWORD=password
 ```
 
-and thats it. Lets start our service now:
+and that's it. Let's start our service now:
 
 ```console
-[root@local-box technitium]# podman-compose up
-podman-compose version: 1.0.6
-['podman', '--version', '']
-using podman version: 4.6.1
-** excluding:  set()
-['podman', 'ps', '--filter', 'label=io.podman.compose.project=technitium', '-a', '--format', '{{ index .Labels "io.podman.compose.config-hash"}}']
-podman create --name=dns-server --label io.podman.compose.config-hash=6353e5665c48089d11116fbdc4f18eec215d2852bd47ac7e2498c1c7d2aadaa4 --label io.podman.compose.project=technitium --label io.podman.compose.version=1.0.6 --label PODMAN_SYSTEMD_UNIT=podman-compose@technitium.service --label com.docker.compose.project=technitium --label com.docker.compose.project.working_dir=/root/tmp/technitium --label com.docker.compose.project.config_files=docker-compose.yml --label com.docker.compose.container-number=1 --label com.docker.compose.service=dns-server -e DNS_SERVER_DOMAIN=dns01.home.arpa -e DNS_SERVER_ADMIN_PASSWORD=password -v /local/data/path:/etc/dns --network host --hostname dns-server --restart unless-stopped --cpu-shares 50 -m 512m technitium/dns-server:latest
-✔ docker.io/technitium/dns-server:latest
-Trying to pull docker.io/technitium/dns-server:latest...
-Getting image source signatures
-Copying blob 0b3a32d011fb done
-Copying blob 4d3bcc6169b1 done
-Copying blob 1b5cdfe08966 done
-Copying blob 8a1e25ce7c4f skipped: already exists
-Copying blob d038975ffc90 done
-Copying blob e324257af4ea done
-Copying blob 30cc68ebc435 done
-Copying blob 6bbeccd44fb6 done
-Copying blob 34c19fcb0c16 done
-Copying blob 904799a03ea6 done
-Copying config d7ec3f033a done
-Writing manifest to image destination
-76c54e7b879cc31be0581124efc5a6ab8f4a2bfc4ab07f8cfcc55e64dc40ca83
-exit code: 0
-podman start -a dns-server
-[dns-server] | Technitium DNS Server was started successfully.
-[dns-server] | Using config folder: /etc/dns
-[dns-server] |
-[dns-server] | Note: Open http://dns-server:5380/ in web browser to access web console.
-[dns-server] |
-[dns-server] | Press [CTRL + C] to stop...
+[root@dns01 ]# docker compose up -d
+[+] Running 1/1
+ ✔ Container dns-server  Started
+
+[root@dns01 ]# netstat -napltu | grep LIST | grep dotnet
+tcp        0      0 0.0.0.0:53              0.0.0.0:*               LISTEN      5936/dotnet
+tcp6       0      0 :::53                   :::*                    LISTEN      5936/dotnet
+tcp6       0      0 :::5380                 :::*                    LISTEN      5936/dotnet
 ```
 
-An there you go. Now we can open the Technitium web UI and continue to configure it from there. To run this as a daemon, just add `-d` to your compose command.
+An there you go. Now we can open the Technitium web UI at http://dns01.home.arpa:5380 and continue to configure it from there. This is now run as a daemon, notice the final `-d` in the command line.
 
 
-### On the raspberry pi host
+### On the Raspberry PI host
 
-First make sure to not use the builtin system-resolved package as it will give you issues staring the server:
+First make sure to not use the builtin `system-resolved` package as it will give you issues staring the server:
 
 ```console
 sudo systemctl disable systemd-resolved
 sudo systemctl stop systemd-resolved
 ```
 
-Then follow the [official guide](https://blog.technitium.com/2017/11/running-dns-server-on-ubuntu-linux.html) to install technitium. Basically:
+Then follow the [official guide](https://blog.technitium.com/2017/11/running-dns-server-on-ubuntu-linux.html) to install Technitium. Note: I am installing directly on the OS and not with docker. Basically:
 
 ```console
 root@dns02.home.arpa:~# curl -sSL https://download.technitium.com/dns/install.sh | sudo bash
@@ -133,12 +112,95 @@ Open http://dns02.home.arpa:5380/ to access the web console.
 
 Donate! Make a contribution by becoming a Patron: https://www.patreon.com/technitium
 
-root@dns02.home.arpa:~# 
 ```
 
-If you are using 
-### Enable dual DNS servers in the DHCP scope
+Both servers are now up and running but we are going to configure only the first one and allow the backup and restore procedure through the API to sync the secondary server.
 
-In the DHCP 
+## Technitium High Availability
 
-## Technitium HA
+### API token creation
+
+On the first DNS server configure both DNS servers in the DHCP scope as below.
+
+![dhcp_settings](/technitium-primary-dhcp.png)
+
+Then create a new API token in `Administration -> Sessions -> Create token` and after giving a name (eg. backup_script), copy the new token value somewhere safe as we need it for the next steps.
+
+Repeat the same token creation procedure in the secondary DNS server as we need this to restore the backup and do some final customizations on the server as mentioned earlier (rename the server and disable the DHCP server). Save the tocken seomwhere safe as we need it for the backup/restore script below.
+
+![token_creation](/technitium-primary-backup_token.png)
+
+### Backup job creation
+
+On the secondary server we will need to run a `cron` job that will parse the backup from the primary server's API and restore locally.
+
+The script is stored in this [gist](https://gist.github.com/besmirzanaj/490c7f8ff61f6e9681fa5656220e3910#file-technitium-sync-sh)
+
+I am pasting here the content of the script as of April 2024. Fill out the variables sections as per your environment.
+
+```bash
+#!/bin/bash
+
+# Author: Besmir Zanaj, 2024
+# This is a very raw script to backup configs (no logs and no stats) from a technitium server 
+# to another
+#
+# first create two tokens: one on the source server and another one on the destination one
+# fill out the vars below
+# create a cronjob with this script on the destinaton host
+# eg:
+# 30 */6 * * * /path-to/technitium-sync.sh
+
+set -euxo pipefail
+
+src_dns_server='source.ip.address'
+dst_dns_server='dest.ip.address'
+src_dns_serverdomain='fqdn.of.source.server'
+dst_dns_serverdomain='fqdn.of.dest.server'
+src_dns_token='SOURCE_TECHNITIUM_TOKEN_HERE'
+dst_dns_token='DEST_TECHNITIUM_TOKEN_HERE'
+backup_file="technitium-backup.zip"
+
+
+# Check the primary server's health before running the script
+echo "Checking primary Technitium server status"
+status_code=$(curl --write-out %{http_code} --silent --output /dev/null http://$src_dns_server:5380)
+
+if [[ "$status_code" -ne 200 ]] ; then
+  echo "Primary DNS server is not available. Skipping backup"
+  exit 1
+else
+  echo "Getting the backup archive from the primary server"
+  curl -s "http://$src_dns_server:5380/api/settings/backup?token=$src_dns_token&blockLists=true&logs=false&scopes=true&stats=false&zones=true&allowedZones=true&blockedZones=true&dnsSettings=true&logSettings=true&authConfig=true&apps=true" -o $backup_file
+fi
+
+# restore_backup
+echo "Restoring the backup on $HOSTNAME"
+curl -s --form file="@$backup_file" "http://$dst_dns_server:5380/api/settings/restore?token=$dst_dns_token&blockLists=true&logs=true&scopes=true&stats=true&apps=true&zones=true&allowedZones=true&blockedZones=true&dnsSettings=true&logSettings=true&deleteExistingFiles=true&authConfig=true"  --output /dev/null
+
+# wait for server to come back
+echo "Waiting for 10 seconds for the destination server to start up"
+sleep 10
+
+# set dnsServerDomain on destination server
+echo "Updating DNS server Domain in destination server"
+curl -X POST "http://$dst_dns_server:5380/api/settings/set?token=$dst_dns_token&dnsServerDomain=$dst_dns_serverdomain"
+
+# disable DHCP on the destination server
+echo "disabling DHCP in destination server"
+curl -X POST "http://$dst_dns_server:5380/api/dhcp/scopes/disable?token=$dst_dns_token&name=local-home"
+
+# cleanup
+echo "Cleaning up temporary files"
+rm -rf $backup_file
+```
+
+### Backup job scheduling
+On the destination server create a cron job to periodically sync the backup so that any updates (eg. new DNS records) on the primary are reflected on the secondary DNS server. In the example below the DNS servers are synced every 12 hrs.
+
+```console
+dns02$ crontab -l | grep sync
+00 */12 * * * /root/technitium-sync.sh
+```
+
+Now our servers are synced and configured as primary backup for our local network.
