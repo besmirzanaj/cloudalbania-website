@@ -10,12 +10,25 @@ tags:
   - dhcp
 
 ---
+<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+
+<!-- code_chunk_output -->
 
 - [Introduction](#introduction)
-- [Prerequisites](#prerequisites)
-- [Procedure](#procedure)
-  - [On the host OS](#on-the-host-os)
-  - [On the VM](#on-the-vm)
+- [Prerequisites for Technitium DNS](#prerequisites-for-technitium-dns)
+- [Technitium installation procedure](#technitium-installation-procedure)
+  - [On the docker host](#on-the-docker-host)
+  - [On the Raspberry PI host](#on-the-raspberry-pi-host)
+- [Technitium High Availability setup](#technitium-high-availability-setup)
+  - [API token creation](#api-token-creation)
+  - [Backup job creation](#backup-job-creation)
+  - [Backup job scheduling](#backup-job-scheduling)
+
+<!-- /code_chunk_output -->
+
+
+
+
 
 ## Introduction
 
@@ -116,7 +129,7 @@ Donate! Make a contribution by becoming a Patron: https://www.patreon.com/techni
 
 Both servers are now up and running but we are going to configure only the first one and allow the backup and restore procedure through the API to sync the secondary server.
 
-## Technitium High Availability
+## Technitium High Availability setup
 
 ### API token creation
 
