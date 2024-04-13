@@ -26,17 +26,13 @@ tags:
 
 <!-- /code_chunk_output -->
 
-
-
-
-
 ## Introduction
 
 [Technitium DNS Server](https://technitium.com/dns/) is a really interesting DNS server that you can use in your homelab. I have gone from [pi-hole ](https://pi-hole.net/) to [AdGuard Home](https://adguard.com/en/adguard-home/overview.html) and while I really liked the minimalistic design and footprint of AdGuard Home, it had some issues when creating custom DNS records in a more advanced homelab scenario. The main painpoint for me was terraform integration. While there are both terraform plugins for [pihole](https://registry.terraform.io/providers/ryanwholey/pihole/latest/docs/resources/dns_record) and [AdGuard Home](https://registry.terraform.io/providers/gmichels/adguard/latest/docs/resources/user_rules) using them gave me stability issues in pihole and never working in AdGuard Home.
 
 After looking for a new solution I found in a Reddit post about Technitium and that it is an open source authoritative as well as recursive DNS server. It can also provide `DHCP` just like the other solutions.
 
-In this article I am going to install Technitium in a docker container as a primary DNS server ()`dns01.home.arpa`) and on a RaspberryPi as a backup DNS server (`dns02.home.arpa`). After settting these up, I will enable a `cron` job on the secondary DNS server to pull and sync the configurations from the primary DNS server periodically to keep them in sync.
+In this article I am going to install Technitium in a docker container as a primary DNS server (`dns01.home.arpa`) and on a RaspberryPi as a backup DNS server (`dns02.home.arpa`). After settting these up, I will enable a `cron` job on the secondary DNS server to pull and sync the configurations from the primary DNS server periodically to keep them in sync.
 
 This job will take into account that the imported data is then customized on the destinaition Raspberry PI server such as the `DNS Server Domain` and the `DHCP` server status. We do not want a second conflicting `DHCP` server in our local net. I opted to manually enable the `DHCP` server on the second server in case of primary server failure.
 
