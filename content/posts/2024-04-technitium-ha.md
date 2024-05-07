@@ -135,7 +135,7 @@ On the first DNS server configure both DNS servers in the DHCP scope as below.
 
 Then create a new API token in `Administration -> Sessions -> Create token` and after giving a name (eg. backup_script), copy the new token value somewhere safe as we need it for the next steps.
 
-Repeat the same token creation procedure in the secondary DNS server as we need this to restore the backup and do some final customizations on the server as mentioned earlier (rename the server and disable the DHCP server). Save the tocken seomwhere safe as we need it for the backup/restore script below.
+Repeat the same token creation procedure in the secondary DNS server as we need this to restore the backup and do some final customizations on the server as mentioned earlier (rename the server and disable the DHCP server). Save the token somewhere safe as we need it for the backup/restore script below.
 
 ![token_creation](/technitium-primary-backup_token.png)
 
