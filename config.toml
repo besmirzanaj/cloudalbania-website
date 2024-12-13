@@ -16,7 +16,7 @@ pygmentsUseClasses = true
 #  theme params
 [params]
 author = "Besmir Zanaj"
-description = "Personal blog where I cover my experiences and best practices as a System Admin and DevOps Engineer"
+description = "Personal blog where I cover my experiences and best practices as a Sys Admin and DevOps Engineer"
 avatar = "/profile.png"
 copyright = "Besmir Zanaj"
 license = "CC BY-SA 4.0"
@@ -82,7 +82,7 @@ gtm = "GTM-PSM5M76"
     lineNumbersInTable = true
     noClasses = true
     style = 'monokai'
-    tabWidth = 4
+    tabWidth = 2
 
 
 [server]
